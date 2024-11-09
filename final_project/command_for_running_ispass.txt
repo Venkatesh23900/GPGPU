@@ -1,0 +1,26 @@
+1. benchmark BFS:
+
+     ./ispass-2009-BFS graph65536.txt
+
+2. benchmark  LIB:
+
+    ./ispass-2009-LIB
+
+3. benchmark LPS
+
+     ./ispass-2009-LPS
+
+4.  benchmark NN, 
+
+    mkdir data/
+
+   cp lw*.wei data/
+
+   cp t10k-images-idx3-ubyte data/
+
+  ./ispass-2009-NN 28   
+
+5. benchmark NQU
+
+    ./ispass-2009-NQU
+
