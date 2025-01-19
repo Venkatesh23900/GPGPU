@@ -1,0 +1,2693 @@
+
+
+        *** GPGPU-Sim Simulator Version 4.0.0  [build gpgpu-sim_git-commit-90ec3399763d7c8512cfe7dc193473086c38ca38_modified_6.0] ***
+
+
+GPGPU-Sim PTX: simulation mode 0 (can change with PTX_SIM_MODE_FUNC environment variable:
+               1=functional simulation only, 0=detailed performance simulator)
+GPGPU-Sim PTX: overriding embedded ptx with ptx file (PTX_SIM_USE_PTX_FILE is set)
+GPGPU-Sim: Configuration options:
+
+-save_embedded_ptx                      0 # saves ptx files embedded in binary as <n>.ptx
+-keep                                   0 # keep intermediate files created by GPGPU-Sim when interfacing with external programs
+-gpgpu_ptx_save_converted_ptxplus                    0 # Saved converted ptxplus to a file
+-gpgpu_occupancy_sm_number                   20 # The SM number to pass to ptxas when getting register usage for computing GPU occupancy. This parameter is required in the config.
+-ptx_opcode_latency_int      4,13,4,5,145,32 # Opcode latencies for integers <ADD,MAX,MUL,MAD,DIV,SHFL>Default 1,1,19,25,145,32
+-ptx_opcode_latency_fp          4,13,4,5,39 # Opcode latencies for single precision floating points <ADD,MAX,MUL,MAD,DIV>Default 1,1,1,1,30
+-ptx_opcode_latency_dp         8,19,8,8,330 # Opcode latencies for double precision floating points <ADD,MAX,MUL,MAD,DIV>Default 8,8,8,8,335
+-ptx_opcode_latency_sfu                    8 # Opcode latencies for SFU instructionsDefault 8
+-ptx_opcode_latency_tesnor                   64 # Opcode latencies for Tensor instructionsDefault 64
+-ptx_opcode_initiation_int          1,2,2,1,8,4 # Opcode initiation intervals for integers <ADD,MAX,MUL,MAD,DIV,SHFL>Default 1,1,4,4,32,4
+-ptx_opcode_initiation_fp            1,2,1,1,4 # Opcode initiation intervals for single precision floating points <ADD,MAX,MUL,MAD,DIV>Default 1,1,1,1,5
+-ptx_opcode_initiation_dp         8,16,8,8,130 # Opcode initiation intervals for double precision floating points <ADD,MAX,MUL,MAD,DIV>Default 8,8,8,8,130
+-ptx_opcode_initiation_sfu                    8 # Opcode initiation intervals for sfu instructionsDefault 8
+-ptx_opcode_initiation_tensor                   64 # Opcode initiation intervals for tensor instructionsDefault 64
+-cdp_latency         7200,8000,100,12000,1600 # CDP API latency <cudaStreamCreateWithFlags, cudaGetParameterBufferV2_init_perWarp, cudaGetParameterBufferV2_perKernel, cudaLaunchDeviceV2_init_perWarp, cudaLaunchDevicV2_perKernel>Default 7200,8000,100,12000,1600
+-network_mode                           1 # Interconnection network mode
+-inter_config_file   config_fermi_islip.icnt # Interconnection network config file
+-icnt_in_buffer_limit                   64 # in_buffer_limit
+-icnt_out_buffer_limit                   64 # out_buffer_limit
+-icnt_subnets                           2 # subnets
+-icnt_arbiter_algo                      1 # arbiter_algo
+-icnt_verbose                           0 # inct_verbose
+-icnt_grant_cycles                      1 # grant_cycles
+-gpgpu_ptx_use_cuobjdump                    1 # Use cuobjdump to extract ptx and sass from binaries
+-gpgpu_experimental_lib_support                    0 # Try to extract code from cuda libraries [Broken because of unknown cudaGetExportTable]
+-checkpoint_option                      0 #  checkpointing flag (0 = no checkpoint)
+-checkpoint_kernel                      1 #  checkpointing during execution of which kernel (1- 1st kernel)
+-checkpoint_CTA                         0 #  checkpointing after # of CTA (< less than total CTA)
+-resume_option                          0 #  resume flag (0 = no resume)
+-resume_kernel                          0 #  Resume from which kernel (1= 1st kernel)
+-resume_CTA                             0 #  resume from which CTA 
+-checkpoint_CTA_t                       0 #  resume from which CTA 
+-checkpoint_insn_Y                      0 #  resume from which CTA 
+-gpgpu_ptx_convert_to_ptxplus                    0 # Convert SASS (native ISA) to ptxplus and run ptxplus
+-gpgpu_ptx_force_max_capability                   20 # Force maximum compute capability
+-gpgpu_ptx_inst_debug_to_file                    0 # Dump executed instructions' debug information to file
+-gpgpu_ptx_inst_debug_file       inst_debug.txt # Executed instructions' debug output file
+-gpgpu_ptx_inst_debug_thread_uid                    1 # Thread UID for executed instructions' debug output
+-gpgpu_simd_model                       1 # 1 = post-dominator
+-gpgpu_shader_core_pipeline              1536:32 # shader core pipeline config, i.e., {<nthread>:<warpsize>}
+-gpgpu_tex_cache:l1  N:4:128:24,L:R:m:N:L,T:128:4,128:2 # per-shader L1 texture cache  (READ-ONLY) config  {<nsets>:<bsize>:<assoc>,<rep>:<wr>:<alloc>:<wr_alloc>,<mshr>:<N>:<merge>,<mq>:<rf>}
+-gpgpu_const_cache:l1 N:64:64:2,L:R:f:N:L,S:2:32,4 # per-shader L1 constant memory cache  (READ-ONLY) config  {<nsets>:<bsize>:<assoc>,<rep>:<wr>:<alloc>:<wr_alloc>,<mshr>:<N>:<merge>,<mq>} 
+-gpgpu_cache:il1     N:4:128:4,L:R:f:N:L,S:2:32,4 # shader L1 instruction cache config  {<nsets>:<bsize>:<assoc>,<rep>:<wr>:<alloc>:<wr_alloc>,<mshr>:<N>:<merge>,<mq>} 
+-gpgpu_cache:dl1     N:32:128:4,L:L:m:N:H,S:64:8,8 # per-shader L1 data cache config  {<nsets>:<bsize>:<assoc>,<rep>:<wr>:<alloc>:<wr_alloc>,<mshr>:<N>:<merge>,<mq> | none}
+-gpgpu_l1_banks                         1 # The number of L1 cache banks
+-gpgpu_l1_banks_byte_interleaving                   32 # l1 banks byte interleaving granularity
+-gpgpu_l1_banks_hashing_function                    0 # l1 banks hashing function
+-gpgpu_l1_latency                      35 # L1 Hit Latency
+-gpgpu_smem_latency                    26 # smem Latency
+-gpgpu_cache:dl1PrefL1                 none # per-shader L1 data cache config  {<nsets>:<bsize>:<assoc>,<rep>:<wr>:<alloc>:<wr_alloc>,<mshr>:<N>:<merge>,<mq> | none}
+-gpgpu_cache:dl1PrefShared                 none # per-shader L1 data cache config  {<nsets>:<bsize>:<assoc>,<rep>:<wr>:<alloc>:<wr_alloc>,<mshr>:<N>:<merge>,<mq> | none}
+-gpgpu_gmem_skip_L1D                    0 # global memory access skip L1D cache (implements -Xptxas -dlcm=cg, default=no skip)
+-gpgpu_perfect_mem                      0 # enable perfect memory mode (no cache miss)
+-n_regfile_gating_group                    4 # group of lanes that should be read/written together)
+-gpgpu_clock_gated_reg_file                    0 # enable clock gated reg file for power calculations
+-gpgpu_clock_gated_lanes                    0 # enable clock gated lanes for power calculations
+-gpgpu_shader_registers                32768 # Number of registers per shader core. Limits number of concurrent CTAs. (default 8192)
+-gpgpu_registers_per_block                 8192 # Maximum number of registers per CTA. (default 8192)
+-gpgpu_ignore_resources_limitation                    0 # gpgpu_ignore_resources_limitation (default 0)
+-gpgpu_shader_cta                       8 # Maximum number of concurrent CTAs in shader (default 8)
+-gpgpu_num_cta_barriers                   16 # Maximum number of named barriers per CTA (default 16)
+-gpgpu_n_clusters                      15 # number of processing clusters
+-gpgpu_n_cores_per_cluster                    1 # number of simd cores per cluster
+-gpgpu_n_cluster_ejection_buffer_size                   32 # number of packets in ejection buffer
+-gpgpu_n_ldst_response_buffer_size                    2 # number of response packets in ld/st unit ejection buffer
+-gpgpu_shmem_per_block                49152 # Size of shared memory per thread block or CTA (default 48kB)
+-gpgpu_shmem_size                   49152 # Size of shared memory per shader core (default 16kB)
+-gpgpu_adaptive_cache_config                    0 # adaptive_cache_config
+-gpgpu_shmem_sizeDefault                49152 # Size of shared memory per shader core (default 16kB)
+-gpgpu_shmem_size_PrefL1                16384 # Size of shared memory per shader core (default 16kB)
+-gpgpu_shmem_size_PrefShared                16384 # Size of shared memory per shader core (default 16kB)
+-gpgpu_shmem_num_banks                   32 # Number of banks in the shared memory in each shader core (default 16)
+-gpgpu_shmem_limited_broadcast                    0 # Limit shared memory to do one broadcast per cycle (default on)
+-gpgpu_shmem_warp_parts                    1 # Number of portions a warp is divided into for shared memory bank conflict check 
+-gpgpu_mem_unit_ports                    1 # The number of memory transactions allowed per core cycle
+-gpgpu_shmem_warp_parts                    1 # Number of portions a warp is divided into for shared memory bank conflict check 
+-gpgpu_warpdistro_shader                   -1 # Specify which shader core to collect the warp size distribution from
+-gpgpu_warp_issue_shader                    0 # Specify which shader core to collect the warp issue distribution from
+-gpgpu_local_mem_map                    1 # Mapping from local memory space address to simulated GPU physical address space (default = enabled)
+-gpgpu_num_reg_banks                   16 # Number of register banks (default = 8)
+-gpgpu_reg_bank_use_warp_id                    0 # Use warp ID in mapping registers to banks (default = off)
+-gpgpu_sub_core_model                    0 # Sub Core Volta/Pascal model (default = off)
+-gpgpu_enable_specialized_operand_collector                    1 # enable_specialized_operand_collector
+-gpgpu_operand_collector_num_units_sp                    6 # number of collector units (default = 4)
+-gpgpu_operand_collector_num_units_dp                    0 # number of collector units (default = 0)
+-gpgpu_operand_collector_num_units_sfu                    8 # number of collector units (default = 4)
+-gpgpu_operand_collector_num_units_int                    0 # number of collector units (default = 0)
+-gpgpu_operand_collector_num_units_tensor_core                    4 # number of collector units (default = 4)
+-gpgpu_operand_collector_num_units_mem                    2 # number of collector units (default = 2)
+-gpgpu_operand_collector_num_units_gen                    0 # number of collector units (default = 0)
+-gpgpu_operand_collector_num_in_ports_sp                    2 # number of collector unit in ports (default = 1)
+-gpgpu_operand_collector_num_in_ports_dp                    0 # number of collector unit in ports (default = 0)
+-gpgpu_operand_collector_num_in_ports_sfu                    1 # number of collector unit in ports (default = 1)
+-gpgpu_operand_collector_num_in_ports_int                    0 # number of collector unit in ports (default = 0)
+-gpgpu_operand_collector_num_in_ports_tensor_core                    1 # number of collector unit in ports (default = 1)
+-gpgpu_operand_collector_num_in_ports_mem                    1 # number of collector unit in ports (default = 1)
+-gpgpu_operand_collector_num_in_ports_gen                    0 # number of collector unit in ports (default = 0)
+-gpgpu_operand_collector_num_out_ports_sp                    2 # number of collector unit in ports (default = 1)
+-gpgpu_operand_collector_num_out_ports_dp                    0 # number of collector unit in ports (default = 0)
+-gpgpu_operand_collector_num_out_ports_sfu                    1 # number of collector unit in ports (default = 1)
+-gpgpu_operand_collector_num_out_ports_int                    0 # number of collector unit in ports (default = 0)
+-gpgpu_operand_collector_num_out_ports_tensor_core                    1 # number of collector unit in ports (default = 1)
+-gpgpu_operand_collector_num_out_ports_mem                    1 # number of collector unit in ports (default = 1)
+-gpgpu_operand_collector_num_out_ports_gen                    0 # number of collector unit in ports (default = 0)
+-gpgpu_coalesce_arch                   20 # Coalescing arch (GT200 = 13, Fermi = 20)
+-gpgpu_num_sched_per_core                    2 # Number of warp schedulers per core
+-gpgpu_max_insn_issue_per_warp                    1 # Max number of instructions that can be issued per warp in one cycle by scheduler (either 1 or 2)
+-gpgpu_dual_issue_diff_exec_units                    1 # should dual issue use two different execution unit resources (Default = 1)
+-gpgpu_simt_core_sim_order                    1 # Select the simulation order of cores in a cluster (0=Fix, 1=Round-Robin)
+-gpgpu_pipeline_widths 2,0,0,1,1,2,0,0,1,1,2 # Pipeline widths ID_OC_SP,ID_OC_DP,ID_OC_INT,ID_OC_SFU,ID_OC_MEM,OC_EX_SP,OC_EX_DP,OC_EX_INT,OC_EX_SFU,OC_EX_MEM,EX_WB,ID_OC_TENSOR_CORE,OC_EX_TENSOR_CORE
+-gpgpu_tensor_core_avail                    0 # Tensor Core Available (default=0)
+-gpgpu_num_sp_units                     2 # Number of SP units (default=1)
+-gpgpu_num_dp_units                     0 # Number of DP units (default=0)
+-gpgpu_num_int_units                    0 # Number of INT units (default=0)
+-gpgpu_num_sfu_units                    1 # Number of SF units (default=1)
+-gpgpu_num_tensor_core_units                    0 # Number of tensor_core units (default=1)
+-gpgpu_num_mem_units                    1 # Number if ldst units (default=1) WARNING: not hooked up to anything
+-gpgpu_scheduler                      gto # Scheduler configuration: < lrr | gto | two_level_active > If two_level_active:<num_active_warps>:<inner_prioritization>:<outer_prioritization>For complete list of prioritization values see shader.h enum scheduler_prioritization_typeDefault: gto
+-gpgpu_concurrent_kernel_sm                    0 # Support concurrent kernels on a SM (default = disabled)
+-gpgpu_perfect_inst_const_cache                    0 # perfect inst and const cache mode, so all inst and const hits in the cache(default = disabled)
+-gpgpu_inst_fetch_throughput                    1 # the number of fetched intruction per warp each cycle
+-gpgpu_reg_file_port_throughput                    1 # the number ports of the register file
+-specialized_unit_1         0,4,4,4,4,BRA # specialized unit config {<enabled>,<num_units>:<latency>:<initiation>,<ID_OC_SPEC>:<OC_EX_SPEC>,<NAME>}
+-specialized_unit_2         0,4,4,4,4,BRA # specialized unit config {<enabled>,<num_units>:<latency>:<initiation>,<ID_OC_SPEC>:<OC_EX_SPEC>,<NAME>}
+-specialized_unit_3         0,4,4,4,4,BRA # specialized unit config {<enabled>,<num_units>:<latency>:<initiation>,<ID_OC_SPEC>:<OC_EX_SPEC>,<NAME>}
+-specialized_unit_4         0,4,4,4,4,BRA # specialized unit config {<enabled>,<num_units>:<latency>:<initiation>,<ID_OC_SPEC>:<OC_EX_SPEC>,<NAME>}
+-specialized_unit_5         0,4,4,4,4,BRA # specialized unit config {<enabled>,<num_units>:<latency>:<initiation>,<ID_OC_SPEC>:<OC_EX_SPEC>,<NAME>}
+-specialized_unit_6         0,4,4,4,4,BRA # specialized unit config {<enabled>,<num_units>:<latency>:<initiation>,<ID_OC_SPEC>:<OC_EX_SPEC>,<NAME>}
+-specialized_unit_7         0,4,4,4,4,BRA # specialized unit config {<enabled>,<num_units>:<latency>:<initiation>,<ID_OC_SPEC>:<OC_EX_SPEC>,<NAME>}
+-specialized_unit_8         0,4,4,4,4,BRA # specialized unit config {<enabled>,<num_units>:<latency>:<initiation>,<ID_OC_SPEC>:<OC_EX_SPEC>,<NAME>}
+-gpgpu_perf_sim_memcpy                    1 # Fill the L2 cache on memcpy
+-gpgpu_simple_dram_model                    0 # simple_dram_model with fixed latency and BW
+-gpgpu_dram_scheduler                    1 # 0 = fifo, 1 = FR-FCFS (defaul)
+-gpgpu_dram_partition_queues          64:64:64:64 # i2$:$2d:d2$:$2i
+-l2_ideal                               0 # Use a ideal L2 cache that always hit
+-gpgpu_cache:dl2     S:64:128:8,L:B:m:L:L,A:256:4,4:0,32 # unified banked L2 data cache config  {<nsets>:<bsize>:<assoc>,<rep>:<wr>:<alloc>:<wr_alloc>,<mshr>:<N>:<merge>,<mq>}
+-gpgpu_cache:dl2_texture_only                    0 # L2 cache used for texture only
+-gpgpu_n_mem                            6 # number of memory modules (e.g. memory controllers) in gpu
+-gpgpu_n_sub_partition_per_mchannel                    2 # number of memory subpartition in each memory module
+-gpgpu_n_mem_per_ctrlr                    2 # number of memory chips per memory controller
+-gpgpu_memlatency_stat                   14 # track and display latency statistics 0x2 enables MC, 0x4 enables queue logs
+-gpgpu_frfcfs_dram_sched_queue_size                   64 # 0 = unlimited (default); # entries per chip
+-gpgpu_dram_return_queue_size                  116 # 0 = unlimited (default); # entries per chip
+-gpgpu_dram_buswidth                    4 # default = 4 bytes (8 bytes per cycle at DDR)
+-gpgpu_dram_burst_length                    8 # Burst length of each DRAM request (default = 4 data bus cycle)
+-dram_data_command_freq_ratio                    4 # Frequency ratio between DRAM data bus and command bus (default = 2 times, i.e. DDR)
+-gpgpu_dram_timing_opt nbk=16:CCD=2:RRD=6:RCD=12:RAS=28:RP=12:RC=40: CL=12:WL=4:CDLR=5:WR=12:nbkgrp=4:CCDL=3:RTPL=2 # DRAM timing parameters = {nbk:tCCD:tRRD:tRCD:tRAS:tRP:tRC:CL:WL:tCDLR:tWR:nbkgrp:tCCDL:tRTPL}
+-gpgpu_l2_rop_latency                  120 # ROP queue latency (default 85)
+-dram_latency                         100 # DRAM latency (default 30)
+-dram_dual_bus_interface                    0 # dual_bus_interface (default = 0) 
+-dram_bnk_indexing_policy                    0 # dram_bnk_indexing_policy (0 = normal indexing, 1 = Xoring with the higher bits) (Default = 0)
+-dram_bnkgrp_indexing_policy                    1 # dram_bnkgrp_indexing_policy (0 = take higher bits, 1 = take lower bits) (Default = 0)
+-dram_seperate_write_queue_enable                    0 # Seperate_Write_Queue_Enable
+-dram_write_queue_size             32:28:16 # Write_Queue_Size
+-dram_elimnate_rw_turnaround                    0 # elimnate_rw_turnaround i.e set tWTR and tRTW = 0
+-icnt_flit_size                        40 # icnt_flit_size
+-gpgpu_mem_addr_mapping dramid@8;00000000.00000000.00000000.00000000.0000RRRR.RRRRRRRR.BBBCCCCB.CCSSSSSS # mapping memory address to dram model {dramid@<start bit>;<memory address map>}
+-gpgpu_mem_addr_test                    0 # run sweep test to check address mapping for aliased address
+-gpgpu_mem_address_mask                    1 # 0 = old addressing mask, 1 = new addressing mask, 2 = new add. mask + flipped bank sel and chip sel bits
+-gpgpu_memory_partition_indexing                    0 # 0 = no indexing, 1 = bitwise xoring, 2 = IPoly, 3 = custom indexing
+-gpuwattch_xml_file  gpuwattch_gtx480.xml # GPUWattch XML file
+-power_simulation_enabled                    1 # Turn on power simulator (1=On, 0=Off)
+-power_per_cycle_dump                    0 # Dump detailed power output each cycle
+-power_trace_enabled                    0 # produce a file for the power trace (1=On, 0=Off)
+-power_trace_zlevel                     6 # Compression level of the power trace output log (0=no comp, 9=highest)
+-steady_power_levels_enabled                    0 # produce a file for the steady power levels (1=On, 0=Off)
+-steady_state_definition                  8:4 # allowed deviation:number of samples
+-gpgpu_max_cycle                        0 # terminates gpu simulation early (0 = no limit)
+-gpgpu_max_insn                         0 # terminates gpu simulation early (0 = no limit)
+-gpgpu_max_cta                          0 # terminates gpu simulation early (0 = no limit)
+-gpgpu_max_completed_cta                    0 # terminates gpu simulation early (0 = no limit)
+-gpgpu_runtime_stat                   500 # display runtime statistics such as dram utilization {<freq>:<flag>}
+-liveness_message_freq                    1 # Minimum number of seconds between simulation liveness messages (0 = always print)
+-gpgpu_compute_capability_major                    2 # Major compute capability version number
+-gpgpu_compute_capability_minor                    0 # Minor compute capability version number
+-gpgpu_flush_l1_cache                    1 # Flush L1 cache at the end of each kernel call
+-gpgpu_flush_l2_cache                    0 # Flush L2 cache at the end of each kernel call
+-gpgpu_deadlock_detect                    1 # Stop the simulation at deadlock (1=on (default), 0=off)
+-gpgpu_ptx_instruction_classification                    0 # if enabled will classify ptx instruction types per kernel (Max 255 kernels now)
+-gpgpu_ptx_sim_mode                     0 # Select between Performance (default) or Functional simulation (1)
+-gpgpu_clock_domains 700.0:700.0:700.0:924.0 # Clock Domain Frequencies in MhZ {<Core Clock>:<ICNT Clock>:<L2 Clock>:<DRAM Clock>}
+-gpgpu_max_concurrent_kernel                    8 # maximum kernels that can run concurrently on GPU
+-gpgpu_cflog_interval                    0 # Interval between each snapshot in control flow logger
+-visualizer_enabled                     0 # Turn on visualizer output (1=On, 0=Off)
+-visualizer_outputfile                 NULL # Specifies the output log file for visualizer
+-visualizer_zlevel                      6 # Compression level of the visualizer output log (0=no comp, 9=highest)
+-gpgpu_stack_size_limit                 1024 # GPU thread stack size
+-gpgpu_heap_size_limit              8388608 # GPU malloc heap size 
+-gpgpu_runtime_sync_depth_limit                    2 # GPU device runtime synchronize depth
+-gpgpu_runtime_pending_launch_count_limit                 2048 # GPU device runtime pending launch count
+-trace_enabled                          0 # Turn on traces
+-trace_components                    none # comma seperated list of traces to enable. Complete list found in trace_streams.tup. Default none
+-trace_sampling_core                    0 # The core which is printed using CORE_DPRINTF. Default 0
+-trace_sampling_memory_partition                   -1 # The memory partition which is printed using MEMPART_DPRINTF. Default -1 (i.e. all)
+-enable_ptx_file_line_stats                    1 # Turn on PTX source line statistic profiling. (1 = On)
+-ptx_line_stats_filename gpgpu_inst_stats.txt # Output file for PTX source line statistics.
+-gpgpu_kernel_launch_latency                    0 # Kernel launch latency in cycles. Default: 0
+-gpgpu_cdp_enabled                      0 # Turn on CDP
+-gpgpu_TB_launch_latency                    0 # thread block launch latency in cycles. Default: 0
+DRAM Timing Options:
+nbk                                    16 # number of banks
+CCD                                     2 # column to column delay
+RRD                                     6 # minimal delay between activation of rows in different banks
+RCD                                    12 # row to column delay
+RAS                                    28 # time needed to activate row
+RP                                     12 # time needed to precharge (deactivate) row
+RC                                     40 # row cycle time
+CDLR                                    5 # switching from write to read (changes tWTR)
+WR                                     12 # last data-in to row precharge
+CL                                     12 # CAS latency
+WL                                      4 # Write latency
+nbkgrp                                  4 # number of bank groups
+CCDL                                    3 # column to column delay between accesses to different bank groups
+RTPL                                    2 # read to precharge delay between accesses to different bank groups
+Total number of memory sub partition = 12
+addr_dec_mask[CHIP]  = 0000000000000000 	high:64 low:0
+addr_dec_mask[BK]    = 000000000000e100 	high:16 low:8
+addr_dec_mask[ROW]   = 000000000fff0000 	high:28 low:16
+addr_dec_mask[COL]   = 0000000000001eff 	high:13 low:0
+addr_dec_mask[BURST] = 000000000000003f 	high:6 low:0
+sub_partition_id_mask = 0000000000000100
+GPGPU-Sim uArch: clock freqs: 700000000.000000:700000000.000000:700000000.000000:924000000.000000
+GPGPU-Sim uArch: clock periods: 0.00000000142857142857:0.00000000142857142857:0.00000000142857142857:0.00000000108225108225
+*** Initializing Memory Statistics ***
+GPGPU-Sim uArch: interconnect node map (shaderID+MemID to icntID)
+GPGPU-Sim uArch: Memory nodes ID start from index: 15
+GPGPU-Sim uArch:    0   1   2   3   4
+GPGPU-Sim uArch:    5   6   7   8   9
+GPGPU-Sim uArch:   10  11  12  13  14
+GPGPU-Sim uArch:   15  16  17  18  19
+GPGPU-Sim uArch:   20  21  22  23  24
+GPGPU-Sim uArch:   25  26
+GPGPU-Sim uArch: interconnect node reverse map (icntID to shaderID+MemID)
+GPGPU-Sim uArch: Memory nodes start from ID: 15
+GPGPU-Sim uArch:    0   1   2   3   4
+GPGPU-Sim uArch:    5   6   7   8   9
+GPGPU-Sim uArch:   10  11  12  13  14
+GPGPU-Sim uArch:   15  16  17  18  19
+GPGPU-Sim uArch:   20  21  22  23  24
+GPGPU-Sim uArch:   25  26
+2cceb431899771a6b490ad81a28094c0  /root/final_project/rodinia/BP/backprop-rodinia-3.1
+Extracting PTX file and ptxas options    1: backprop-rodinia-3.1.sm_30.ptx -arch=sm_30
+Extracting PTX file and ptxas options    2: backprop-rodinia-3.2.sm_35.ptx -arch=sm_35
+Extracting PTX file and ptxas options    3: backprop-rodinia-3.3.sm_50.ptx -arch=sm_50
+Extracting PTX file and ptxas options    4: backprop-rodinia-3.4.sm_60.ptx -arch=sm_60
+Extracting PTX file and ptxas options    5: backprop-rodinia-3.5.sm_62.ptx -arch=sm_62
+GPGPU-Sim uArch: performance model initialization complete.
+self exe links to: /root/final_project/rodinia/BP/backprop-rodinia-3.1
+self exe links to: /root/final_project/rodinia/BP/backprop-rodinia-3.1
+10.1
+GPGPU-Sim PTX: __cudaRegisterFatBinary, fat_cubin_handle = 1, filename=default
+self exe links to: /root/final_project/rodinia/BP/backprop-rodinia-3.1
+Running md5sum using "md5sum /root/final_project/rodinia/BP/backprop-rodinia-3.1 "
+self exe links to: /root/final_project/rodinia/BP/backprop-rodinia-3.1
+Extracting specific PTX file named backprop-rodinia-3.1.sm_30.ptx 
+Extracting specific PTX file named backprop-rodinia-3.2.sm_35.ptx 
+Extracting specific PTX file named backprop-rodinia-3.3.sm_50.ptx 
+Extracting specific PTX file named backprop-rodinia-3.4.sm_60.ptx 
+Extracting specific PTX file named backprop-rodinia-3.5.sm_62.ptx 
+GPGPU-Sim PTX: __cudaRegisterFunction _Z24bpnn_adjust_weights_cudaPfiS_iS_S_ : hostFun 0x0x402160, fat_cubin_handle = 1
+GPGPU-Sim PTX: Parsing backprop-rodinia-3.1.sm_30.ptx
+GPGPU-Sim PTX: allocating shared region for "_ZZ22bpnn_layerforward_CUDAPfS_S_S_iiE10input_node" from 0x0 to 0x40 (shared memory space)
+GPGPU-Sim PTX: allocating shared region for "_ZZ22bpnn_layerforward_CUDAPfS_S_S_iiE13weight_matrix" from 0x80 to 0x480 (shared memory space)
+GPGPU-Sim PTX: instruction assembly for function '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'...   done.
+GPGPU-Sim PTX: instruction assembly for function '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'...   done.
+GPGPU-Sim PTX: finished parsing EMBEDDED .ptx file backprop-rodinia-3.1.sm_30.ptx
+GPGPU-Sim PTX: Parsing backprop-rodinia-3.2.sm_35.ptx
+GPGPU-Sim PTX: Warning %p0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:26 skipping new declaration
+GPGPU-Sim PTX: Warning %p1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:26 skipping new declaration
+GPGPU-Sim PTX: Warning %p2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:26 skipping new declaration
+GPGPU-Sim PTX: Warning %p3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:26 skipping new declaration
+GPGPU-Sim PTX: Warning %p4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:26 skipping new declaration
+GPGPU-Sim PTX: Warning %p5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:26 skipping new declaration
+GPGPU-Sim PTX: Warning %f0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f12 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f13 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f14 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f15 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f16 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f17 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f18 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f19 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f20 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %r0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r12 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r13 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r14 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r15 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r16 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r17 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r18 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r19 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r20 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r21 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r22 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r23 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r24 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r25 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r26 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r27 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r28 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r29 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r30 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r31 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r32 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r33 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r34 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r35 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r36 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %rd0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd12 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning _ZZ22bpnn_layerforward_CUDAPfS_S_S_iiE10input_node was declared previous at backprop-rodinia-3.1.sm_30.ptx:31 skipping new declaration
+GPGPU-Sim PTX: Warning _ZZ22bpnn_layerforward_CUDAPfS_S_S_iiE13weight_matrix was declared previous at backprop-rodinia-3.1.sm_30.ptx:33 skipping new declaration
+GPGPU-Sim PTX: instruction assembly for function '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'...   done.
+GPGPU-Sim PTX: Warning %p0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:145 skipping new declaration
+GPGPU-Sim PTX: Warning %p1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:145 skipping new declaration
+GPGPU-Sim PTX: Warning %f0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f12 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f13 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f14 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f15 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f16 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %r0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %fd0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd12 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd13 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd14 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd15 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd16 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd17 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd18 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd19 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd20 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd21 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd22 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd23 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd24 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %rd0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd12 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd13 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd14 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd15 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd16 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd17 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd18 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: instruction assembly for function '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'...   done.
+GPGPU-Sim PTX: finished parsing EMBEDDED .ptx file backprop-rodinia-3.2.sm_35.ptx
+GPGPU-Sim PTX: Parsing backprop-rodinia-3.3.sm_50.ptx
+GPGPU-Sim PTX: Warning %p0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:26 skipping new declaration
+GPGPU-Sim PTX: Warning %p1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:26 skipping new declaration
+GPGPU-Sim PTX: Warning %p2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:26 skipping new declaration
+GPGPU-Sim PTX: Warning %p3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:26 skipping new declaration
+GPGPU-Sim PTX: Warning %p4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:26 skipping new declaration
+GPGPU-Sim PTX: Warning %p5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:26 skipping new declaration
+GPGPU-Sim PTX: Warning %f0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f12 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f13 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f14 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f15 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f16 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f17 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f18 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f19 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f20 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %r0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r12 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r13 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r14 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r15 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r16 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r17 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r18 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r19 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r20 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r21 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r22 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r23 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r24 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r25 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r26 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r27 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r28 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r29 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r30 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r31 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r32 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r33 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r34 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r35 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r36 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %rd0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd12 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning _ZZ22bpnn_layerforward_CUDAPfS_S_S_iiE10input_node was declared previous at backprop-rodinia-3.1.sm_30.ptx:31 skipping new declaration
+GPGPU-Sim PTX: Warning _ZZ22bpnn_layerforward_CUDAPfS_S_S_iiE13weight_matrix was declared previous at backprop-rodinia-3.1.sm_30.ptx:33 skipping new declaration
+GPGPU-Sim PTX: instruction assembly for function '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'...   done.
+GPGPU-Sim PTX: Warning %p0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:145 skipping new declaration
+GPGPU-Sim PTX: Warning %p1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:145 skipping new declaration
+GPGPU-Sim PTX: Warning %f0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f12 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f13 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f14 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f15 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f16 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %r0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %fd0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd12 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd13 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd14 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd15 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd16 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd17 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd18 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd19 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd20 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd21 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd22 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd23 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd24 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %rd0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd12 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd13 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd14 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd15 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd16 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd17 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd18 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: instruction assembly for function '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'...   done.
+GPGPU-Sim PTX: finished parsing EMBEDDED .ptx file backprop-rodinia-3.3.sm_50.ptx
+GPGPU-Sim PTX: Parsing backprop-rodinia-3.4.sm_60.ptx
+GPGPU-Sim PTX: Warning %p0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:26 skipping new declaration
+GPGPU-Sim PTX: Warning %p1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:26 skipping new declaration
+GPGPU-Sim PTX: Warning %p2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:26 skipping new declaration
+GPGPU-Sim PTX: Warning %p3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:26 skipping new declaration
+GPGPU-Sim PTX: Warning %p4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:26 skipping new declaration
+GPGPU-Sim PTX: Warning %p5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:26 skipping new declaration
+GPGPU-Sim PTX: Warning %f0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f12 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f13 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f14 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f15 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f16 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f17 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f18 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f19 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f20 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %r0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r12 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r13 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r14 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r15 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r16 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r17 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r18 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r19 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r20 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r21 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r22 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r23 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r24 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r25 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r26 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r27 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r28 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r29 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r30 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r31 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r32 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r33 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r34 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r35 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r36 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %rd0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd12 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning _ZZ22bpnn_layerforward_CUDAPfS_S_S_iiE10input_node was declared previous at backprop-rodinia-3.1.sm_30.ptx:31 skipping new declaration
+GPGPU-Sim PTX: Warning _ZZ22bpnn_layerforward_CUDAPfS_S_S_iiE13weight_matrix was declared previous at backprop-rodinia-3.1.sm_30.ptx:33 skipping new declaration
+GPGPU-Sim PTX: instruction assembly for function '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'...   done.
+GPGPU-Sim PTX: Warning %p0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:145 skipping new declaration
+GPGPU-Sim PTX: Warning %p1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:145 skipping new declaration
+GPGPU-Sim PTX: Warning %f0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f12 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f13 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f14 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f15 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f16 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %r0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %fd0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd12 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd13 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd14 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd15 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd16 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd17 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd18 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd19 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd20 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd21 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd22 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd23 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd24 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %rd0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd12 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd13 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd14 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd15 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd16 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd17 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd18 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: instruction assembly for function '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'...   done.
+GPGPU-Sim PTX: finished parsing EMBEDDED .ptx file backprop-rodinia-3.4.sm_60.ptx
+GPGPU-Sim PTX: Parsing backprop-rodinia-3.5.sm_62.ptx
+GPGPU-Sim PTX: Warning %p0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:26 skipping new declaration
+GPGPU-Sim PTX: Warning %p1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:26 skipping new declaration
+GPGPU-Sim PTX: Warning %p2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:26 skipping new declaration
+GPGPU-Sim PTX: Warning %p3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:26 skipping new declaration
+GPGPU-Sim PTX: Warning %p4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:26 skipping new declaration
+GPGPU-Sim PTX: Warning %p5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:26 skipping new declaration
+GPGPU-Sim PTX: Warning %f0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f12 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f13 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f14 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f15 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f16 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f17 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f18 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f19 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %f20 was declared previous at backprop-rodinia-3.1.sm_30.ptx:27 skipping new declaration
+GPGPU-Sim PTX: Warning %r0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r12 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r13 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r14 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r15 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r16 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r17 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r18 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r19 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r20 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r21 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r22 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r23 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r24 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r25 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r26 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r27 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r28 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r29 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r30 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r31 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r32 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r33 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r34 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r35 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %r36 was declared previous at backprop-rodinia-3.1.sm_30.ptx:28 skipping new declaration
+GPGPU-Sim PTX: Warning %rd0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning %rd12 was declared previous at backprop-rodinia-3.1.sm_30.ptx:29 skipping new declaration
+GPGPU-Sim PTX: Warning _ZZ22bpnn_layerforward_CUDAPfS_S_S_iiE10input_node was declared previous at backprop-rodinia-3.1.sm_30.ptx:31 skipping new declaration
+GPGPU-Sim PTX: Warning _ZZ22bpnn_layerforward_CUDAPfS_S_S_iiE13weight_matrix was declared previous at backprop-rodinia-3.1.sm_30.ptx:33 skipping new declaration
+GPGPU-Sim PTX: instruction assembly for function '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'...   done.
+GPGPU-Sim PTX: Warning %p0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:145 skipping new declaration
+GPGPU-Sim PTX: Warning %p1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:145 skipping new declaration
+GPGPU-Sim PTX: Warning %f0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f12 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f13 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f14 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f15 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %f16 was declared previous at backprop-rodinia-3.1.sm_30.ptx:146 skipping new declaration
+GPGPU-Sim PTX: Warning %r0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %r11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:147 skipping new declaration
+GPGPU-Sim PTX: Warning %fd0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd12 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd13 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd14 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd15 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd16 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd17 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd18 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd19 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd20 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd21 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd22 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd23 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %fd24 was declared previous at backprop-rodinia-3.1.sm_30.ptx:148 skipping new declaration
+GPGPU-Sim PTX: Warning %rd0 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd1 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd2 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd3 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd4 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd5 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd6 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd7 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd8 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd9 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd10 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd11 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd12 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd13 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd14 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd15 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd16 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd17 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: Warning %rd18 was declared previous at backprop-rodinia-3.1.sm_30.ptx:149 skipping new declaration
+GPGPU-Sim PTX: instruction assembly for function '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'...   done.
+GPGPU-Sim PTX: finished parsing EMBEDDED .ptx file backprop-rodinia-3.5.sm_62.ptx
+GPGPU-Sim PTX: loading globals with explicit initializers... 
+GPGPU-Sim PTX: finished loading globals (0 bytes total).
+GPGPU-Sim PTX: loading constants with explicit initializers...  done.
+GPGPU-Sim PTX: Loading PTXInfo from backprop-rodinia-3.1.sm_30.ptx
+GPGPU-Sim PTX: Kernel '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_' : regs=21, lmem=0, smem=0, cmem=376
+GPGPU-Sim PTX: Kernel '_Z22bpnn_layerforward_CUDAPfS_S_S_ii' : regs=17, lmem=0, smem=1088, cmem=360
+GPGPU-Sim PTX: Loading PTXInfo from backprop-rodinia-3.2.sm_35.ptx
+GPGPU-Sim PTX: Kernel '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_' : regs=21, lmem=0, smem=0, cmem=376
+GPGPU-Sim PTX: Kernel '_Z22bpnn_layerforward_CUDAPfS_S_S_ii' : regs=17, lmem=0, smem=1088, cmem=360
+GPGPU-Sim PTX: Loading PTXInfo from backprop-rodinia-3.3.sm_50.ptx
+GPGPU-Sim PTX: Kernel '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_' : regs=23, lmem=0, smem=0, cmem=376
+GPGPU-Sim PTX: Kernel '_Z22bpnn_layerforward_CUDAPfS_S_S_ii' : regs=20, lmem=0, smem=1088, cmem=360
+GPGPU-Sim PTX: Loading PTXInfo from backprop-rodinia-3.4.sm_60.ptx
+GPGPU-Sim PTX: Kernel '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_' : regs=20, lmem=0, smem=0, cmem=376
+GPGPU-Sim PTX: Kernel '_Z22bpnn_layerforward_CUDAPfS_S_S_ii' : regs=20, lmem=0, smem=1088, cmem=360
+GPGPU-Sim PTX: Loading PTXInfo from backprop-rodinia-3.5.sm_62.ptx
+GPGPU-Sim PTX: Kernel '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_' : regs=20, lmem=0, smem=0, cmem=376
+GPGPU-Sim PTX: Kernel '_Z22bpnn_layerforward_CUDAPfS_S_S_ii' : regs=20, lmem=0, smem=1088, cmem=360
+GPGPU-Sim PTX: __cudaRegisterFunction _Z22bpnn_layerforward_CUDAPfS_S_S_ii : hostFun 0x0x402030, fat_cubin_handle = 1
+Random number generator seed: 7
+Input layer size : 65536
+Starting training kernel
+Performing GPU computation
+GPGPU-Sim PTX: Setting up arguments for 8 bytes starting at 0x7fff7e7cbaf8..
+GPGPU-Sim PTX: Setting up arguments for 8 bytes starting at 0x7fff7e7cbaf0..
+GPGPU-Sim PTX: Setting up arguments for 8 bytes starting at 0x7fff7e7cbae8..
+GPGPU-Sim PTX: Setting up arguments for 8 bytes starting at 0x7fff7e7cbae0..
+GPGPU-Sim PTX: Setting up arguments for 4 bytes starting at 0x7fff7e7cbadc..
+GPGPU-Sim PTX: Setting up arguments for 4 bytes starting at 0x7fff7e7cbad8..
+
+GPGPU-Sim PTX: cudaLaunch for 0x0x402030 (mode=performance simulation) on stream 0
+GPGPU-Sim PTX: finding reconvergence points for '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'...
+GPGPU-Sim PTX: Finding dominators for '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'...
+GPGPU-Sim PTX: Finding immediate dominators for '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'...
+GPGPU-Sim PTX: Finding postdominators for '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'...
+GPGPU-Sim PTX: Finding immediate postdominators for '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'...
+GPGPU-Sim PTX: pre-decoding instructions for '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'...
+GPGPU-Sim PTX: reconvergence points for _Z22bpnn_layerforward_CUDAPfS_S_S_ii...
+GPGPU-Sim PTX:  1 (potential) branch divergence @  PC=0x1468 (backprop-rodinia-3.5.sm_62.ptx:48) @%p2 bra BB0_2;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1498 (backprop-rodinia-3.5.sm_62.ptx:57) cvta.to.global.u64 %rd1, %rd4;
+GPGPU-Sim PTX:  2 (potential) branch divergence @  PC=0x1550 (backprop-rodinia-3.5.sm_62.ptx:80) @%p3 bra BB0_7;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1628 (backprop-rodinia-3.5.sm_62.ptx:115) setp.eq.s32%p1, %r4, 0;
+GPGPU-Sim PTX:  3 (potential) branch divergence @  PC=0x15a0 (backprop-rodinia-3.5.sm_62.ptx:93) @%p4 bra BB0_6;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1600 (backprop-rodinia-3.5.sm_62.ptx:108) bar.sync 0;
+GPGPU-Sim PTX:  4 (potential) branch divergence @  PC=0x1620 (backprop-rodinia-3.5.sm_62.ptx:112) @%p5 bra BB0_4;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1628 (backprop-rodinia-3.5.sm_62.ptx:115) setp.eq.s32%p1, %r4, 0;
+GPGPU-Sim PTX:  5 (potential) branch divergence @  PC=0x1648 (backprop-rodinia-3.5.sm_62.ptx:119) @!%p1 bra BB0_9;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1690 (backprop-rodinia-3.5.sm_62.ptx:132) ret;
+GPGPU-Sim PTX:  6 (potential) branch divergence @  PC=0x1650 (backprop-rodinia-3.5.sm_62.ptx:120) bra.uni BB0_8;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1658 (backprop-rodinia-3.5.sm_62.ptx:123) cvta.to.global.u64 %rd10, %rd5;
+GPGPU-Sim PTX: ... end of reconvergence points for _Z22bpnn_layerforward_CUDAPfS_S_S_ii
+GPGPU-Sim PTX: ... done pre-decoding instructions for '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'.
+GPGPU-Sim PTX: pushing kernel '_Z22bpnn_layerforward_CUDAPfS_S_S_ii' to stream 0, gridDim= (1,4096,1) blockDim = (16,16,1) 
+GPGPU-Sim uArch: Shader 0 bind to kernel 1 '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'
+GPGPU-Sim uArch: CTA/core = 6, limited by: threads regs
+GPGPU-Sim uArch: Shader 1 bind to kernel 1 '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'
+GPGPU-Sim uArch: Shader 2 bind to kernel 1 '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'
+GPGPU-Sim uArch: Shader 3 bind to kernel 1 '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'
+GPGPU-Sim uArch: Shader 4 bind to kernel 1 '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'
+GPGPU-Sim uArch: Shader 5 bind to kernel 1 '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'
+GPGPU-Sim uArch: Shader 6 bind to kernel 1 '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'
+GPGPU-Sim uArch: Shader 7 bind to kernel 1 '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'
+GPGPU-Sim uArch: Shader 8 bind to kernel 1 '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'
+GPGPU-Sim uArch: Shader 9 bind to kernel 1 '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'
+GPGPU-Sim uArch: Shader 10 bind to kernel 1 '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'
+GPGPU-Sim uArch: Shader 11 bind to kernel 1 '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'
+GPGPU-Sim uArch: Shader 12 bind to kernel 1 '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'
+GPGPU-Sim uArch: Shader 13 bind to kernel 1 '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'
+GPGPU-Sim uArch: Shader 14 bind to kernel 1 '_Z22bpnn_layerforward_CUDAPfS_S_S_ii'
+Destroy streams for kernel 1: size 0
+kernel_name = _Z22bpnn_layerforward_CUDAPfS_S_S_ii 
+kernel_launch_uid = 1 
+gpu_sim_cycle = 156557
+gpu_sim_insn = 104923136
+gpu_ipc =     670.1913
+gpu_tot_sim_cycle = 156557
+gpu_tot_sim_insn = 104923136
+gpu_tot_ipc =     670.1913
+gpu_tot_issued_cta = 4096
+gpu_occupancy = 98.8480% 
+gpu_tot_occupancy = 98.8480% 
+max_total_param_size = 0
+gpu_stall_dramfull = 145
+gpu_stall_icnt2sh    = 0
+partiton_level_parallism =       0.9163
+partiton_level_parallism_total  =       0.9163
+partiton_level_parallism_util =       1.5510
+partiton_level_parallism_util_total  =       1.5510
+L2_BW  =      56.3064 GB/Sec
+L2_BW_total  =      56.3064 GB/Sec
+gpu_total_sim_rate=364316
+
+========= Core cache stats =========
+L1I_cache:
+	L1I_total_cache_accesses = 2203648
+	L1I_total_cache_misses = 2470
+	L1I_total_cache_miss_rate = 0.0011
+	L1I_total_cache_pending_hits = 0
+	L1I_total_cache_reservation_fails = 4152
+L1D_cache:
+	L1D_cache_core[0]: Access = 13253, Miss = 6999, Miss_rate = 0.528, Pending_hits = 2778, Reservation_fails = 106
+	L1D_cache_core[1]: Access = 13255, Miss = 7016, Miss_rate = 0.529, Pending_hits = 2762, Reservation_fails = 81
+	L1D_cache_core[2]: Access = 13234, Miss = 6981, Miss_rate = 0.528, Pending_hits = 2749, Reservation_fails = 44
+	L1D_cache_core[3]: Access = 13220, Miss = 6960, Miss_rate = 0.526, Pending_hits = 2720, Reservation_fails = 254
+	L1D_cache_core[4]: Access = 13236, Miss = 6983, Miss_rate = 0.528, Pending_hits = 2758, Reservation_fails = 435
+	L1D_cache_core[5]: Access = 13237, Miss = 6996, Miss_rate = 0.529, Pending_hits = 2760, Reservation_fails = 354
+	L1D_cache_core[6]: Access = 13245, Miss = 6998, Miss_rate = 0.528, Pending_hits = 2769, Reservation_fails = 293
+	L1D_cache_core[7]: Access = 13243, Miss = 6993, Miss_rate = 0.528, Pending_hits = 2770, Reservation_fails = 297
+	L1D_cache_core[8]: Access = 13249, Miss = 7008, Miss_rate = 0.529, Pending_hits = 2748, Reservation_fails = 616
+	L1D_cache_core[9]: Access = 13237, Miss = 6987, Miss_rate = 0.528, Pending_hits = 2754, Reservation_fails = 272
+	L1D_cache_core[10]: Access = 13287, Miss = 7019, Miss_rate = 0.528, Pending_hits = 2761, Reservation_fails = 492
+	L1D_cache_core[11]: Access = 13236, Miss = 6984, Miss_rate = 0.528, Pending_hits = 2759, Reservation_fails = 571
+	L1D_cache_core[12]: Access = 13245, Miss = 6999, Miss_rate = 0.528, Pending_hits = 2776, Reservation_fails = 314
+	L1D_cache_core[13]: Access = 13246, Miss = 6989, Miss_rate = 0.528, Pending_hits = 2760, Reservation_fails = 209
+	L1D_cache_core[14]: Access = 13233, Miss = 6978, Miss_rate = 0.527, Pending_hits = 2733, Reservation_fails = 342
+	L1D_total_cache_accesses = 198656
+	L1D_total_cache_misses = 104890
+	L1D_total_cache_miss_rate = 0.5280
+	L1D_total_cache_pending_hits = 41357
+	L1D_total_cache_reservation_fails = 4680
+	L1D_cache_data_port_util = 0.022
+	L1D_cache_fill_port_util = 0.019
+L1C_cache:
+	L1C_total_cache_accesses = 131072
+	L1C_total_cache_misses = 480
+	L1C_total_cache_miss_rate = 0.0037
+	L1C_total_cache_pending_hits = 0
+	L1C_total_cache_reservation_fails = 3254
+L1T_cache:
+	L1T_total_cache_accesses = 0
+	L1T_total_cache_misses = 0
+	L1T_total_cache_pending_hits = 0
+	L1T_total_cache_reservation_fails = 0
+
+Total_core_cache_stats:
+	Total_core_cache_stats_breakdown[GLOBAL_ACC_R][HIT] = 13957
+	Total_core_cache_stats_breakdown[GLOBAL_ACC_R][HIT_RESERVED] = 41357
+	Total_core_cache_stats_breakdown[GLOBAL_ACC_R][MISS] = 45038
+	Total_core_cache_stats_breakdown[GLOBAL_ACC_R][RESERVATION_FAIL] = 4634
+	Total_core_cache_stats_breakdown[GLOBAL_ACC_R][SECTOR_MISS] = 0
+	Total_core_cache_stats_breakdown[LOCAL_ACC_R][HIT] = 0
+	Total_core_cache_stats_breakdown[LOCAL_ACC_R][HIT_RESERVED] = 0
+	Total_core_cache_stats_breakdown[LOCAL_ACC_R][MISS] = 0
+	Total_core_cache_stats_breakdown[LOCAL_ACC_R][RESERVATION_FAIL] = 0
+	Total_core_cache_stats_breakdown[LOCAL_ACC_R][SECTOR_MISS] = 0
+	Total_core_cache_stats_breakdown[CONST_ACC_R][HIT] = 130592
+	Total_core_cache_stats_breakdown[CONST_ACC_R][HIT_RESERVED] = 0
+	Total_core_cache_stats_breakdown[CONST_ACC_R][MISS] = 480
+	Total_core_cache_stats_breakdown[CONST_ACC_R][RESERVATION_FAIL] = 3254
+	Total_core_cache_stats_breakdown[CONST_ACC_R][SECTOR_MISS] = 0
+	Total_core_cache_stats_breakdown[TEXTURE_ACC_R][HIT] = 0
+	Total_core_cache_stats_breakdown[TEXTURE_ACC_R][HIT_RESERVED] = 0
+	Total_core_cache_stats_breakdown[TEXTURE_ACC_R][MISS] = 0
+	Total_core_cache_stats_breakdown[TEXTURE_ACC_R][RESERVATION_FAIL] = 0
+	Total_core_cache_stats_breakdown[TEXTURE_ACC_R][SECTOR_MISS] = 0
+	Total_core_cache_stats_breakdown[GLOBAL_ACC_W][HIT] = 38452
+	Total_core_cache_stats_breakdown[GLOBAL_ACC_W][HIT_RESERVED] = 0
+	Total_core_cache_stats_breakdown[GLOBAL_ACC_W][MISS] = 59852
+	Total_core_cache_stats_breakdown[GLOBAL_ACC_W][RESERVATION_FAIL] = 46
+	Total_core_cache_stats_breakdown[GLOBAL_ACC_W][SECTOR_MISS] = 0
+	Total_core_cache_stats_breakdown[LOCAL_ACC_W][HIT] = 0
+	Total_core_cache_stats_breakdown[LOCAL_ACC_W][HIT_RESERVED] = 0
+	Total_core_cache_stats_breakdown[LOCAL_ACC_W][MISS] = 0
+	Total_core_cache_stats_breakdown[LOCAL_ACC_W][RESERVATION_FAIL] = 0
+	Total_core_cache_stats_breakdown[LOCAL_ACC_W][SECTOR_MISS] = 0
+	Total_core_cache_stats_breakdown[L1_WRBK_ACC][HIT] = 0
+	Total_core_cache_stats_breakdown[L1_WRBK_ACC][HIT_RESERVED] = 0
+	Total_core_cache_stats_breakdown[L1_WRBK_ACC][MISS] = 0
+	Total_core_cache_stats_breakdown[L1_WRBK_ACC][RESERVATION_FAIL] = 0
+	Total_core_cache_stats_breakdown[L1_WRBK_ACC][SECTOR_MISS] = 0
+	Total_core_cache_stats_breakdown[L2_WRBK_ACC][HIT] = 0
+	Total_core_cache_stats_breakdown[L2_WRBK_ACC][HIT_RESERVED] = 0
+	Total_core_cache_stats_breakdown[L2_WRBK_ACC][MISS] = 0
+	Total_core_cache_stats_breakdown[L2_WRBK_ACC][RESERVATION_FAIL] = 0
+	Total_core_cache_stats_breakdown[L2_WRBK_ACC][SECTOR_MISS] = 0
+	Total_core_cache_stats_breakdown[INST_ACC_R][HIT] = 2201178
+	Total_core_cache_stats_breakdown[INST_ACC_R][HIT_RESERVED] = 0
+	Total_core_cache_stats_breakdown[INST_ACC_R][MISS] = 2470
+	Total_core_cache_stats_breakdown[INST_ACC_R][RESERVATION_FAIL] = 4152
+	Total_core_cache_stats_breakdown[INST_ACC_R][SECTOR_MISS] = 0
+	Total_core_cache_stats_breakdown[L1_WR_ALLOC_R][HIT] = 0
+	Total_core_cache_stats_breakdown[L1_WR_ALLOC_R][HIT_RESERVED] = 0
+	Total_core_cache_stats_breakdown[L1_WR_ALLOC_R][MISS] = 0
+	Total_core_cache_stats_breakdown[L1_WR_ALLOC_R][RESERVATION_FAIL] = 0
+	Total_core_cache_stats_breakdown[L1_WR_ALLOC_R][SECTOR_MISS] = 0
+	Total_core_cache_stats_breakdown[L2_WR_ALLOC_R][HIT] = 0
+	Total_core_cache_stats_breakdown[L2_WR_ALLOC_R][HIT_RESERVED] = 0
+	Total_core_cache_stats_breakdown[L2_WR_ALLOC_R][MISS] = 0
+	Total_core_cache_stats_breakdown[L2_WR_ALLOC_R][RESERVATION_FAIL] = 0
+	Total_core_cache_stats_breakdown[L2_WR_ALLOC_R][SECTOR_MISS] = 0
+	Total_core_cache_stats_breakdown[GLOBAL_ACC_R][TOTAL_ACCESS] = 100352
+	Total_core_cache_stats_breakdown[CONST_ACC_R][TOTAL_ACCESS] = 131072
+	Total_core_cache_stats_breakdown[GLOBAL_ACC_W][TOTAL_ACCESS] = 98304
+	Total_core_cache_stats_breakdown[INST_ACC_R][TOTAL_ACCESS] = 2203648
+
+Total_core_cache_fail_stats:
+	Total_core_cache_fail_stats_breakdown[GLOBAL_ACC_R][LINE_ALLOC_FAIL] = 2301
+	Total_core_cache_fail_stats_breakdown[GLOBAL_ACC_R][MISS_QUEUE_FULL] = 1321
+	Total_core_cache_fail_stats_breakdown[GLOBAL_ACC_R][MSHR_MERGE_ENRTY_FAIL] = 1012
+	Total_core_cache_fail_stats_breakdown[CONST_ACC_R][MSHR_MERGE_ENRTY_FAIL] = 3254
+	Total_core_cache_fail_stats_breakdown[GLOBAL_ACC_W][MISS_QUEUE_FULL] = 46
+	Total_core_cache_fail_stats_breakdown[INST_ACC_R][MSHR_MERGE_ENRTY_FAIL] = 4152
+ctas_completed 4096, Shader 0 warp_id issue ditsribution:
+warp_id:
+0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 
+distro:
+6854, 5336, 5842, 5336, 6348, 5336, 5842, 5336, 6854, 5336, 5842, 5336, 6348, 5336, 5842, 5336, 6854, 5336, 5842, 5336, 6348, 5336, 5842, 5336, 6705, 5220, 5715, 5220, 6210, 5220, 5715, 5220, 6705, 5220, 5715, 5220, 6210, 5220, 5715, 5220, 6705, 5220, 5715, 5220, 6210, 5220, 5715, 5220, 
+gpgpu_n_tot_thrd_icount = 131727360
+gpgpu_n_tot_w_icount = 4116480
+gpgpu_n_stall_shd_mem = 70838
+gpgpu_n_mem_read_local = 0
+gpgpu_n_mem_write_local = 0
+gpgpu_n_mem_read_global = 45038
+gpgpu_n_mem_write_global = 98304
+gpgpu_n_mem_texture = 0
+gpgpu_n_mem_const = 15
+# of global memory access: 198656
+# of local memory access: 0
+gpgpu_n_load_insn  = 1114112
+gpgpu_n_store_insn = 1114112
+gpgpu_n_shmem_insn = 8323072
+gpgpu_n_sstarr_insn = 0
+gpgpu_n_tex_insn = 0
+gpgpu_n_const_mem_insn = 0
+gpgpu_n_param_mem_insn = 4194304
+gpgpu_n_shmem_bkconflict = 0
+gpgpu_n_cache_bkconflict = 0
+gpgpu_n_intrawarp_mshr_merge = 0
+gpgpu_n_cmem_portconflict = 3254
+gpgpu_stall_shd_mem[c_mem][resource_stall] = 3254
+gpgpu_stall_shd_mem[s_mem][bk_conf] = 0
+gpgpu_stall_shd_mem[gl_mem][resource_stall] = 0
+gpgpu_stall_shd_mem[gl_mem][coal_stall] = 67584
+gpgpu_stall_shd_mem[gl_mem][data_port_stall] = 0
+gpu_reg_bank_conflict_stalls = 0
+Warp Occupancy Distribution:
+Stall:251529	W0_Idle:19050	W0_Scoreboard:299337	W1:0	W2:425984	W3:0	W4:0	W5:0	W6:0	W7:0	W8:0	W9:0	W10:0	W11:0	W12:0	W13:0	W14:0	W15:0	W16:675840	W17:0	W18:0	W19:0	W20:0	W21:0	W22:0	W23:0	W24:0	W25:0	W26:0	W27:0	W28:0	W29:0	W30:0	W31:0	W32:3014656
+single_issue_nums: WS0:2215936	WS1:1900544	
+dual_issue_nums: WS0:0	WS1:0	
+traffic_breakdown_coretomem[CONST_ACC_R] = 120 {8:15,}
+traffic_breakdown_coretomem[GLOBAL_ACC_R] = 360304 {8:45038,}
+traffic_breakdown_coretomem[GLOBAL_ACC_W] = 7602176 {40:49152,72:16384,136:32768,}
+traffic_breakdown_coretomem[INST_ACC_R] = 720 {8:90,}
+traffic_breakdown_memtocore[CONST_ACC_R] = 1200 {40:30,}
+traffic_breakdown_memtocore[GLOBAL_ACC_R] = 7206080 {40:180152,}
+traffic_breakdown_memtocore[GLOBAL_ACC_W] = 1703936 {8:212992,}
+traffic_breakdown_memtocore[INST_ACC_R] = 14400 {40:360,}
+maxmflatency = 714 
+max_icnt2mem_latency = 289 
+maxmrqlatency = 204 
+max_icnt2sh_latency = 115 
+averagemflatency = 200 
+avg_icnt2mem_latency = 18 
+avg_mrq_latency = 23 
+avg_icnt2sh_latency = 12 
+mrq_lat_table:41194 	14589 	14807 	16154 	44011 	30364 	16670 	688 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	
+dq_lat_table:0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	
+mf_lat_table:0 	0 	0 	0 	0 	0 	0 	279710 	112850 	614 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	
+icnt2mem_lat_table:0 	0 	56 	33 	16 	123222 	20001 	110 	9 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	
+icnt2sh_lat_table:0 	0 	149850 	164098 	58739 	19103 	1384 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	
+mf_lat_pw_table:0 	0 	0 	0 	0 	0 	0 	307 	3 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	
+maximum concurrent accesses to same row:
+dram[0]:       128       120       128       128       128       128       128       128       128       128       128       128       128       128       128       128 
+dram[1]:       120       112       128       128       128       128       128       128       128       128       128       128       128       128       128       128 
+dram[2]:       120       119       128       128       128       128       128       128       128       128       128       128       128       128       128       128 
+dram[3]:       115       128       128       128       128       128       128       128       128       128       128       128       128       128       128       128 
+dram[4]:       128       128       128       128       128       128       128       128       128       128       128       128       128       128       128       128 
+dram[5]:       120       128       128       128       128       128       128       128       128       128       128       128       128       128       128       128 
+maximum service time to same row:
+dram[0]:     12404     12591     13734     13938     13615     13727     13520     13400     13713     13378     13765     13963     15482     15649     17177     17465 
+dram[1]:     12262     12455     13751     14083     13652     13717     13555     13396     13725     13519     13762     14018     15481     15629     17209     17163 
+dram[2]:     12377     12421     13680     14100     13647     13763     13525     13487     13616     13595     13875     14034     15504     15631     17254     17152 
+dram[3]:     12704     12500     14028     14214     13716     13622     13513     13515     13625     13596     13874     13979     15512     15646     17260     17060 
+dram[4]:     12454     12510     14036     14210     13700     13423     13522     13502     13425     13612     13877     13899     15525     15649     17266     17172 
+dram[5]:     12427     12496     13907     14154     13712     13329     13397     13543     13415     13617     13897     13893     15677     15781     17265     17178 
+average row accesses per activate:
+dram[0]: 10.947675 11.023529  9.883598 10.320442 10.602273 10.923977 10.613636 10.196721 10.630057 10.384181 10.658959 10.087432 12.800000 12.625851 11.386503 11.386503 
+dram[1]: 11.393939 11.426829 10.923977 10.086487  9.925532 11.390244 10.435754 10.309392 10.697675 11.559749 10.244445 11.120481 12.712329 14.060606 12.291390 12.291390 
+dram[2]: 11.586420 10.632769 11.390244 10.196721 10.724138 11.390244 10.043011 10.141304 10.748538 10.624277 10.783626 10.370787 12.456376 14.730159 11.974194 11.600000 
+dram[3]: 10.959064 10.754286 10.797688 10.252748 10.729885 10.797688 10.435754  9.718750  9.623036 11.487500 11.745223 10.670520 13.070422 14.387597 11.746836 11.317073 
+dram[4]: 11.221557 11.202381 11.253012 10.483146  9.936171 11.460123 10.372222  9.978610 10.748538 11.487500 10.165746  9.978378 13.954887 14.060606 12.456376 11.746836 
+dram[5]: 11.496933 11.580247 10.207650  9.978610 10.613636 11.321212 10.086487  9.821053 10.443182 11.195122 10.863905 10.032609 14.060606 12.888889 12.130719 11.974194 
+average row locality = 178477/16120 = 11.071774
+number of total memory accesses made:
+dram[0]:         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0 
+dram[1]:         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0 
+dram[2]:         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0 
+dram[3]:         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0 
+dram[4]:         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0 
+dram[5]:         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0 
+total accesses: 0
+min_bank_accesses = 0!
+min_chip_accesses = 0!
+number of total read accesses:
+dram[0]:         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0 
+dram[1]:         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0 
+dram[2]:         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0 
+dram[3]:         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0 
+dram[4]:         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0 
+dram[5]:         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0 
+total dram reads = 0
+min_bank_accesses = 0!
+min_chip_accesses = 0!
+number of total write accesses:
+dram[0]:       674       676       664       664       660       664       664       660       606       604       616       619       640       640       640       640 
+dram[1]:       672       676       664       660       660       664       664       660       608       604       616       620       640       640       640       640 
+dram[2]:       674       676       664       660       660       664       664       660       604       604       616       620       640       640       640       640 
+dram[3]:       676       676       664       660       662       664       664       660       604       604       616       620       640       640       640       640 
+dram[4]:       676       676       664       660       664       664       662       660       604       604       616       620       640       640       640       640 
+dram[5]:       676       680       664       660       664       664       660       660       604       600       616       620       640       640       640       640 
+total dram writes = 61973
+bank skew: 680/600 = 1.13
+chip skew: 10331/10326 = 1.00
+average mf latency per bank:
+dram[0]:       1259      1260      1278      1278      1288      1289      1291      1293      1412      1400      1264      1275      1208      1193      1176      1182
+dram[1]:       1261      1263      1286      1305      1293      1287      1273      1275      1387      1421      1265      1277      1192      1192      1179      1167
+dram[2]:       1248      1263      1282      1296      1282      1279      1292      1284      1400      1405      1279      1264      1191      1201      1168      1173
+dram[3]:       1265      1265      1278      1294      1281      1282      1282      1296      1391      1415      1289      1278      1179      1205      1179      1185
+dram[4]:       1266      1270      1275      1278      1270      1278      1289      1291      1396      1422      1270      1265      1198      1196      1179      1167
+dram[5]:       1265      1263      1267      1291      1277      1283      1291      1296      1406      1417      1266      1258      1197      1191      1165      1174
+maximum mf latency per bank:
+dram[0]:        427       436       382       381       358       361       419       393       393       368       364       397       530       558       591       582
+dram[1]:        429       444       369       438       433       379       364       388       386       381       382       416       531       546       597       585
+dram[2]:        399       467       381       436       359       353       424       372       390       373       386       377       542       589       597       579
+dram[3]:        446       486       355       400       369       380       380       395       362       397       367       503       498       714       536       653
+dram[4]:        437       478       376       383       347       396       382       372       386       416       387       401       541       548       589       607
+dram[5]:        368       468       342       367       385       383       424       365       430       398       384       384       542       557       557       570
+Memory Partition 0: 
+Cache L2_bank_000:
+MSHR contents
+
+Cache L2_bank_001:
+MSHR contents
+
+In Dram Latency Queue (total = 0): 
+DRAM[0]: 16 bks, busW=4 BL=8 CL=12, tRRD=6 tCCD=2, tRCD=12 tRAS=28 tRP=12 tRC=40
+n_cmd=206654 n_nop=166312 n_act=2750 n_pre=2734 n_ref_event=17071712 n_req=29752 n_rd=24586 n_rd_L2_A=0 n_write=0 n_wr_bk=10331 bw_util=0.3379
+n_activity=149832 dram_eff=0.4661
+bk0: 1546a 193415i bk1: 1536a 193378i bk2: 1536a 193498i bk3: 1536a 193857i bk4: 1536a 193443i bk5: 1536a 193018i bk6: 1536a 193030i bk7: 1536a 193829i bk8: 1536a 193988i bk9: 1536a 193828i bk10: 1536a 193880i bk11: 1536a 193522i bk12: 1536a 193588i bk13: 1536a 194202i bk14: 1536a 194061i bk15: 1536a 194154i 
+
+------------------------------------------------------------------------
+
+Row_Buffer_Locality = 0.907838
+Row_Buffer_Locality_read = 0.944806
+Row_Buffer_Locality_write = 0.731901
+Bank_Level_Parallism = 1.757077
+Bank_Level_Parallism_Col = 0.000000
+Bank_Level_Parallism_Ready = 1.077081
+write_to_read_ratio_blp_rw_average = 0.000000
+GrpLevelPara = 0.000000 
+
+BW Util details:
+bwutil = 0.337927 
+total_CMD = 206654 
+util_bw = 69834 
+Wasted_Col = 48138 
+Wasted_Row = 17177 
+Idle = 71505 
+
+BW Util Bottlenecks: 
+RCDc_limit = 12585 
+RCDWRc_limit = 6100 
+WTRc_limit = 7233 
+RTWc_limit = 24156 
+CCDLc_limit = 26894 
+rwq = 0 
+CCDLc_limit_alone = 20283 
+WTRc_limit_alone = 6310 
+RTWc_limit_alone = 18468 
+
+Commands details: 
+total_CMD = 206654 
+n_nop = 166312 
+Read = 24586 
+Write = 0 
+L2_Alloc = 0 
+L2_WB = 10331 
+n_act = 2750 
+n_pre = 2734 
+n_ref = 17071712 
+n_req = 29752 
+total_req = 34917 
+
+Dual Bus Interface Util: 
+issued_total_row = 5484 
+issued_total_col = 34917 
+Row_Bus_Util =  0.026537 
+CoL_Bus_Util = 0.168964 
+Either_Row_CoL_Bus_Util = 0.195215 
+Issued_on_Two_Bus_Simul_Util = 0.000286 
+issued_two_Eff = 0.001462 
+queue_avg = 4.339369 
+
+
+dram_util_bins: 0 0 0 0 0 0 0 0 0 0
+dram_eff_bins: 0 0 0 0 0 0 0 0 0 0
+mrqq: max=64 avg=4.33937
+Memory Partition 1: 
+Cache L2_bank_002:
+MSHR contents
+
+Cache L2_bank_003:
+MSHR contents
+
+In Dram Latency Queue (total = 0): 
+DRAM[1]: 16 bks, busW=4 BL=8 CL=12, tRRD=6 tCCD=2, tRCD=12 tRAS=28 tRP=12 tRC=40
+n_cmd=206654 n_nop=166513 n_act=2662 n_pre=2646 n_ref_event=17916352 n_req=29748 n_rd=24584 n_rd_L2_A=0 n_write=0 n_wr_bk=10328 bw_util=0.3379
+n_activity=148641 dram_eff=0.4697
+bk0: 1544a 192740i bk1: 1536a 194033i bk2: 1536a 193796i bk3: 1536a 193460i bk4: 1536a 193293i bk5: 1536a 193219i bk6: 1536a 193094i bk7: 1536a 193399i bk8: 1536a 193987i bk9: 1536a 193919i bk10: 1536a 193847i bk11: 1536a 193444i bk12: 1536a 193130i bk13: 1536a 194667i bk14: 1536a 194079i bk15: 1536a 194162i 
+
+------------------------------------------------------------------------
+
+Row_Buffer_Locality = 0.910784
+Row_Buffer_Locality_read = 0.946957
+Row_Buffer_Locality_write = 0.738575
+Bank_Level_Parallism = 1.781498
+Bank_Level_Parallism_Col = 1.659899
+Bank_Level_Parallism_Ready = 1.076875
+write_to_read_ratio_blp_rw_average = 0.436336
+GrpLevelPara = 1.406901 
+
+BW Util details:
+bwutil = 0.337879 
+total_CMD = 206654 
+util_bw = 69824 
+Wasted_Col = 47746 
+Wasted_Row = 16022 
+Idle = 73062 
+
+BW Util Bottlenecks: 
+RCDc_limit = 11992 
+RCDWRc_limit = 5872 
+WTRc_limit = 6988 
+RTWc_limit = 24594 
+CCDLc_limit = 27059 
+rwq = 0 
+CCDLc_limit_alone = 20481 
+WTRc_limit_alone = 6130 
+RTWc_limit_alone = 18874 
+
+Commands details: 
+total_CMD = 206654 
+n_nop = 166513 
+Read = 24584 
+Write = 0 
+L2_Alloc = 0 
+L2_WB = 10328 
+n_act = 2662 
+n_pre = 2646 
+n_ref = 17916352 
+n_req = 29748 
+total_req = 34912 
+
+Dual Bus Interface Util: 
+issued_total_row = 5308 
+issued_total_col = 34912 
+Row_Bus_Util =  0.025685 
+CoL_Bus_Util = 0.168939 
+Either_Row_CoL_Bus_Util = 0.194243 
+Issued_on_Two_Bus_Simul_Util = 0.000382 
+issued_two_Eff = 0.001968 
+queue_avg = 4.339427 
+
+
+dram_util_bins: 0 0 0 0 0 0 0 0 0 0
+dram_eff_bins: 0 0 0 0 0 0 0 0 0 0
+mrqq: max=64 avg=4.33943
+Memory Partition 2: 
+Cache L2_bank_004:
+MSHR contents
+
+Cache L2_bank_005:
+MSHR contents
+
+In Dram Latency Queue (total = 0): 
+DRAM[2]: 16 bks, busW=4 BL=8 CL=12, tRRD=6 tCCD=2, tRCD=12 tRAS=28 tRP=12 tRC=40
+n_cmd=206654 n_nop=166457 n_act=2684 n_pre=2668 n_ref_event=4573281077806086524 n_req=29751 n_rd=24588 n_rd_L2_A=0 n_write=0 n_wr_bk=10326 bw_util=0.3379
+n_activity=147484 dram_eff=0.4735
+bk0: 1540a 193871i bk1: 1544a 192839i bk2: 1536a 194147i bk3: 1536a 193066i bk4: 1536a 193872i bk5: 1536a 193437i bk6: 1536a 192292i bk7: 1536a 193140i bk8: 1536a 193411i bk9: 1536a 193985i bk10: 1536a 193722i bk11: 1536a 193604i bk12: 1536a 193615i bk13: 1536a 194633i bk14: 1536a 194138i bk15: 1536a 194087i 
+
+------------------------------------------------------------------------
+
+Row_Buffer_Locality = 0.910020
+Row_Buffer_Locality_read = 0.945909
+Row_Buffer_Locality_write = 0.739105
+Bank_Level_Parallism = 1.796568
+Bank_Level_Parallism_Col = 1.830981
+Bank_Level_Parallism_Ready = 1.081596
+write_to_read_ratio_blp_rw_average = 0.438566
+GrpLevelPara = 1.410847 
+
+BW Util details:
+bwutil = 0.337898 
+total_CMD = 206654 
+util_bw = 69828 
+Wasted_Col = 47053 
+Wasted_Row = 15790 
+Idle = 73983 
+
+BW Util Bottlenecks: 
+RCDc_limit = 12118 
+RCDWRc_limit = 5727 
+WTRc_limit = 6747 
+RTWc_limit = 24758 
+CCDLc_limit = 26945 
+rwq = 0 
+CCDLc_limit_alone = 20368 
+WTRc_limit_alone = 5908 
+RTWc_limit_alone = 19020 
+
+Commands details: 
+total_CMD = 206654 
+n_nop = 166457 
+Read = 24588 
+Write = 0 
+L2_Alloc = 0 
+L2_WB = 10326 
+n_act = 2684 
+n_pre = 2668 
+n_ref = 4573281077806086524 
+n_req = 29751 
+total_req = 34914 
+
+Dual Bus Interface Util: 
+issued_total_row = 5352 
+issued_total_col = 34914 
+Row_Bus_Util =  0.025898 
+CoL_Bus_Util = 0.168949 
+Either_Row_CoL_Bus_Util = 0.194514 
+Issued_on_Two_Bus_Simul_Util = 0.000334 
+issued_two_Eff = 0.001717 
+queue_avg = 4.375420 
+
+
+dram_util_bins: 0 0 0 0 0 0 0 0 0 0
+dram_eff_bins: 0 0 0 0 0 0 0 0 0 0
+mrqq: max=64 avg=4.37542
+Memory Partition 3: 
+Cache L2_bank_006:
+MSHR contents
+
+Cache L2_bank_007:
+MSHR contents
+
+In Dram Latency Queue (total = 0): 
+DRAM[3]: 16 bks, busW=4 BL=8 CL=12, tRRD=6 tCCD=2, tRCD=12 tRAS=28 tRP=12 tRC=40
+n_cmd=206654 n_nop=166423 n_act=2701 n_pre=2685 n_ref_event=0 n_req=29749 n_rd=24584 n_rd_L2_A=0 n_write=0 n_wr_bk=10330 bw_util=0.3379
+n_activity=147576 dram_eff=0.4732
+bk0: 1536a 193086i bk1: 1544a 193309i bk2: 1536a 193930i bk3: 1536a 193548i bk4: 1536a 192730i bk5: 1536a 193520i bk6: 1536a 193438i bk7: 1536a 192537i bk8: 1536a 192982i bk9: 1536a 194081i bk10: 1536a 194248i bk11: 1536a 193782i bk12: 1536a 193499i bk13: 1536a 194767i bk14: 1536a 193716i bk15: 1536a 193276i 
+
+------------------------------------------------------------------------
+
+Row_Buffer_Locality = 0.909476
+Row_Buffer_Locality_read = 0.946144
+Row_Buffer_Locality_write = 0.734947
+Bank_Level_Parallism = 1.802288
+Bank_Level_Parallism_Col = 1.672852
+Bank_Level_Parallism_Ready = 1.081486
+write_to_read_ratio_blp_rw_average = 0.443188
+GrpLevelPara = 1.426870 
+
+BW Util details:
+bwutil = 0.337898 
+total_CMD = 206654 
+util_bw = 69828 
+Wasted_Col = 47057 
+Wasted_Row = 16115 
+Idle = 73654 
+
+BW Util Bottlenecks: 
+RCDc_limit = 11929 
+RCDWRc_limit = 5761 
+WTRc_limit = 7012 
+RTWc_limit = 24455 
+CCDLc_limit = 26380 
+rwq = 0 
+CCDLc_limit_alone = 20095 
+WTRc_limit_alone = 6243 
+RTWc_limit_alone = 18939 
+
+Commands details: 
+total_CMD = 206654 
+n_nop = 166423 
+Read = 24584 
+Write = 0 
+L2_Alloc = 0 
+L2_WB = 10330 
+n_act = 2701 
+n_pre = 2685 
+n_ref = 0 
+n_req = 29749 
+total_req = 34914 
+
+Dual Bus Interface Util: 
+issued_total_row = 5386 
+issued_total_col = 34914 
+Row_Bus_Util =  0.026063 
+CoL_Bus_Util = 0.168949 
+Either_Row_CoL_Bus_Util = 0.194678 
+Issued_on_Two_Bus_Simul_Util = 0.000334 
+issued_two_Eff = 0.001715 
+queue_avg = 4.389114 
+
+
+dram_util_bins: 0 0 0 0 0 0 0 0 0 0
+dram_eff_bins: 0 0 0 0 0 0 0 0 0 0
+mrqq: max=64 avg=4.38911
+Memory Partition 4: 
+Cache L2_bank_008:
+MSHR contents
+
+Cache L2_bank_009:
+MSHR contents
+
+In Dram Latency Queue (total = 0): 
+DRAM[4]: 16 bks, busW=4 BL=8 CL=12, tRRD=6 tCCD=2, tRCD=12 tRAS=28 tRP=12 tRC=40
+n_cmd=206654 n_nop=166486 n_act=2674 n_pre=2658 n_ref_event=0 n_req=29745 n_rd=24580 n_rd_L2_A=0 n_write=0 n_wr_bk=10330 bw_util=0.3379
+n_activity=148599 dram_eff=0.4699
+bk0: 1536a 193246i bk1: 1544a 193453i bk2: 1536a 193636i bk3: 1536a 193487i bk4: 1536a 193016i bk5: 1536a 193601i bk6: 1536a 193215i bk7: 1536a 192916i bk8: 1536a 193589i bk9: 1536a 193796i bk10: 1532a 193772i bk11: 1536a 193396i bk12: 1536a 194132i bk13: 1536a 194301i bk14: 1536a 194348i bk15: 1536a 194318i 
+
+------------------------------------------------------------------------
+
+Row_Buffer_Locality = 0.910371
+Row_Buffer_Locality_read = 0.946461
+Row_Buffer_Locality_write = 0.738625
+Bank_Level_Parallism = 1.775783
+Bank_Level_Parallism_Col = 1.656671
+Bank_Level_Parallism_Ready = 1.076558
+write_to_read_ratio_blp_rw_average = 0.438919
+GrpLevelPara = 1.410964 
+
+BW Util details:
+bwutil = 0.337859 
+total_CMD = 206654 
+util_bw = 69820 
+Wasted_Col = 47696 
+Wasted_Row = 16468 
+Idle = 72670 
+
+BW Util Bottlenecks: 
+RCDc_limit = 11989 
+RCDWRc_limit = 5870 
+WTRc_limit = 7045 
+RTWc_limit = 24767 
+CCDLc_limit = 26864 
+rwq = 0 
+CCDLc_limit_alone = 20396 
+WTRc_limit_alone = 6212 
+RTWc_limit_alone = 19132 
+
+Commands details: 
+total_CMD = 206654 
+n_nop = 166486 
+Read = 24580 
+Write = 0 
+L2_Alloc = 0 
+L2_WB = 10330 
+n_act = 2674 
+n_pre = 2658 
+n_ref = 0 
+n_req = 29745 
+total_req = 34910 
+
+Dual Bus Interface Util: 
+issued_total_row = 5332 
+issued_total_col = 34910 
+Row_Bus_Util =  0.025802 
+CoL_Bus_Util = 0.168930 
+Either_Row_CoL_Bus_Util = 0.194373 
+Issued_on_Two_Bus_Simul_Util = 0.000358 
+issued_two_Eff = 0.001842 
+queue_avg = 4.375004 
+
+
+dram_util_bins: 0 0 0 0 0 0 0 0 0 0
+dram_eff_bins: 0 0 0 0 0 0 0 0 0 0
+mrqq: max=64 avg=4.375
+Memory Partition 5: 
+Cache L2_bank_010:
+MSHR contents
+
+Cache L2_bank_011:
+MSHR contents
+
+In Dram Latency Queue (total = 0): 
+DRAM[5]: 16 bks, busW=4 BL=8 CL=12, tRRD=6 tCCD=2, tRCD=12 tRAS=28 tRP=12 tRC=40
+n_cmd=206654 n_nop=166447 n_act=2696 n_pre=2680 n_ref_event=51680 n_req=29732 n_rd=24568 n_rd_L2_A=0 n_write=0 n_wr_bk=10328 bw_util=0.3377
+n_activity=148299 dram_eff=0.4706
+bk0: 1536a 193347i bk1: 1536a 193460i bk2: 1536a 193482i bk3: 1536a 193042i bk4: 1536a 192950i bk5: 1536a 193526i bk6: 1536a 193088i bk7: 1536a 193676i bk8: 1536a 193864i bk9: 1536a 193866i bk10: 1528a 194066i bk11: 1536a 193418i bk12: 1536a 194837i bk13: 1536a 193834i bk14: 1536a 194367i bk15: 1536a 193974i 
+
+------------------------------------------------------------------------
+
+Row_Buffer_Locality = 0.909592
+Row_Buffer_Locality_read = 0.945905
+Row_Buffer_Locality_write = 0.736832
+Bank_Level_Parallism = 1.780634
+Bank_Level_Parallism_Col = 1.650445
+Bank_Level_Parallism_Ready = 1.085174
+write_to_read_ratio_blp_rw_average = 0.436410
+GrpLevelPara = 1.409613 
+
+BW Util details:
+bwutil = 0.337724 
+total_CMD = 206654 
+util_bw = 69792 
+Wasted_Col = 47554 
+Wasted_Row = 16006 
+Idle = 73302 
+
+BW Util Bottlenecks: 
+RCDc_limit = 11984 
+RCDWRc_limit = 5970 
+WTRc_limit = 7539 
+RTWc_limit = 24041 
+CCDLc_limit = 26655 
+rwq = 0 
+CCDLc_limit_alone = 20249 
+WTRc_limit_alone = 6676 
+RTWc_limit_alone = 18498 
+
+Commands details: 
+total_CMD = 206654 
+n_nop = 166447 
+Read = 24568 
+Write = 0 
+L2_Alloc = 0 
+L2_WB = 10328 
+n_act = 2696 
+n_pre = 2680 
+n_ref = 51680 
+n_req = 29732 
+total_req = 34896 
+
+Dual Bus Interface Util: 
+issued_total_row = 5376 
+issued_total_col = 34896 
+Row_Bus_Util =  0.026014 
+CoL_Bus_Util = 0.168862 
+Either_Row_CoL_Bus_Util = 0.194562 
+Issued_on_Two_Bus_Simul_Util = 0.000315 
+issued_two_Eff = 0.001617 
+queue_avg = 4.360046 
+
+
+dram_util_bins: 0 0 0 0 0 0 0 0 0 0
+dram_eff_bins: 0 0 0 0 0 0 0 0 0 0
+mrqq: max=64 avg=4.36005
+
+========= L2 cache stats =========
+L2_cache_bank[0]: Access = 32801, Miss = 15018, Miss_rate = 0.458, Pending_hits = 1657, Reservation_fails = 214
+L2_cache_bank[1]: Access = 32780, Miss = 15040, Miss_rate = 0.459, Pending_hits = 1634, Reservation_fails = 86
+L2_cache_bank[2]: Access = 32767, Miss = 15016, Miss_rate = 0.458, Pending_hits = 1656, Reservation_fails = 136
+L2_cache_bank[3]: Access = 32754, Miss = 15008, Miss_rate = 0.458, Pending_hits = 1720, Reservation_fails = 98
+L2_cache_bank[4]: Access = 32755, Miss = 15012, Miss_rate = 0.458, Pending_hits = 1720, Reservation_fails = 131
+L2_cache_bank[5]: Access = 32869, Miss = 15016, Miss_rate = 0.457, Pending_hits = 1682, Reservation_fails = 298
+L2_cache_bank[6]: Access = 32788, Miss = 15040, Miss_rate = 0.459, Pending_hits = 1700, Reservation_fails = 101
+L2_cache_bank[7]: Access = 32873, Miss = 15016, Miss_rate = 0.457, Pending_hits = 1722, Reservation_fails = 482
+L2_cache_bank[8]: Access = 32768, Miss = 15036, Miss_rate = 0.459, Pending_hits = 1582, Reservation_fails = 110
+L2_cache_bank[9]: Access = 32865, Miss = 15016, Miss_rate = 0.457, Pending_hits = 1692, Reservation_fails = 236
+L2_cache_bank[10]: Access = 32764, Miss = 15032, Miss_rate = 0.459, Pending_hits = 1643, Reservation_fails = 110
+L2_cache_bank[11]: Access = 32750, Miss = 15008, Miss_rate = 0.458, Pending_hits = 1748, Reservation_fails = 105
+L2_total_cache_accesses = 393534
+L2_total_cache_misses = 180258
+L2_total_cache_miss_rate = 0.4580
+L2_total_cache_pending_hits = 20156
+L2_total_cache_reservation_fails = 2107
+L2_total_cache_breakdown:
+	L2_cache_stats_breakdown[GLOBAL_ACC_R][HIT] = 12610
+	L2_cache_stats_breakdown[GLOBAL_ACC_R][HIT_RESERVED] = 20078
+	L2_cache_stats_breakdown[GLOBAL_ACC_R][MISS] = 36866
+	L2_cache_stats_breakdown[GLOBAL_ACC_R][RESERVATION_FAIL] = 1261
+	L2_cache_stats_breakdown[GLOBAL_ACC_R][SECTOR_MISS] = 110598
+	L2_cache_stats_breakdown[LOCAL_ACC_R][HIT] = 0
+	L2_cache_stats_breakdown[LOCAL_ACC_R][HIT_RESERVED] = 0
+	L2_cache_stats_breakdown[LOCAL_ACC_R][MISS] = 0
+	L2_cache_stats_breakdown[LOCAL_ACC_R][RESERVATION_FAIL] = 0
+	L2_cache_stats_breakdown[LOCAL_ACC_R][SECTOR_MISS] = 0
+	L2_cache_stats_breakdown[CONST_ACC_R][HIT] = 22
+	L2_cache_stats_breakdown[CONST_ACC_R][HIT_RESERVED] = 6
+	L2_cache_stats_breakdown[CONST_ACC_R][MISS] = 1
+	L2_cache_stats_breakdown[CONST_ACC_R][RESERVATION_FAIL] = 106
+	L2_cache_stats_breakdown[CONST_ACC_R][SECTOR_MISS] = 1
+	L2_cache_stats_breakdown[TEXTURE_ACC_R][HIT] = 0
+	L2_cache_stats_breakdown[TEXTURE_ACC_R][HIT_RESERVED] = 0
+	L2_cache_stats_breakdown[TEXTURE_ACC_R][MISS] = 0
+	L2_cache_stats_breakdown[TEXTURE_ACC_R][RESERVATION_FAIL] = 0
+	L2_cache_stats_breakdown[TEXTURE_ACC_R][SECTOR_MISS] = 0
+	L2_cache_stats_breakdown[GLOBAL_ACC_W][HIT] = 180224
+	L2_cache_stats_breakdown[GLOBAL_ACC_W][HIT_RESERVED] = 0
+	L2_cache_stats_breakdown[GLOBAL_ACC_W][MISS] = 2048
+	L2_cache_stats_breakdown[GLOBAL_ACC_W][RESERVATION_FAIL] = 0
+	L2_cache_stats_breakdown[GLOBAL_ACC_W][SECTOR_MISS] = 30720
+	L2_cache_stats_breakdown[LOCAL_ACC_W][HIT] = 0
+	L2_cache_stats_breakdown[LOCAL_ACC_W][HIT_RESERVED] = 0
+	L2_cache_stats_breakdown[LOCAL_ACC_W][MISS] = 0
+	L2_cache_stats_breakdown[LOCAL_ACC_W][RESERVATION_FAIL] = 0
+	L2_cache_stats_breakdown[LOCAL_ACC_W][SECTOR_MISS] = 0
+	L2_cache_stats_breakdown[L1_WRBK_ACC][HIT] = 0
+	L2_cache_stats_breakdown[L1_WRBK_ACC][HIT_RESERVED] = 0
+	L2_cache_stats_breakdown[L1_WRBK_ACC][MISS] = 0
+	L2_cache_stats_breakdown[L1_WRBK_ACC][RESERVATION_FAIL] = 0
+	L2_cache_stats_breakdown[L1_WRBK_ACC][SECTOR_MISS] = 0
+	L2_cache_stats_breakdown[L2_WRBK_ACC][HIT] = 0
+	L2_cache_stats_breakdown[L2_WRBK_ACC][HIT_RESERVED] = 0
+	L2_cache_stats_breakdown[L2_WRBK_ACC][MISS] = 0
+	L2_cache_stats_breakdown[L2_WRBK_ACC][RESERVATION_FAIL] = 0
+	L2_cache_stats_breakdown[L2_WRBK_ACC][SECTOR_MISS] = 0
+	L2_cache_stats_breakdown[INST_ACC_R][HIT] = 264
+	L2_cache_stats_breakdown[INST_ACC_R][HIT_RESERVED] = 72
+	L2_cache_stats_breakdown[INST_ACC_R][MISS] = 6
+	L2_cache_stats_breakdown[INST_ACC_R][RESERVATION_FAIL] = 740
+	L2_cache_stats_breakdown[INST_ACC_R][SECTOR_MISS] = 18
+	L2_cache_stats_breakdown[L1_WR_ALLOC_R][HIT] = 0
+	L2_cache_stats_breakdown[L1_WR_ALLOC_R][HIT_RESERVED] = 0
+	L2_cache_stats_breakdown[L1_WR_ALLOC_R][MISS] = 0
+	L2_cache_stats_breakdown[L1_WR_ALLOC_R][RESERVATION_FAIL] = 0
+	L2_cache_stats_breakdown[L1_WR_ALLOC_R][SECTOR_MISS] = 0
+	L2_cache_stats_breakdown[L2_WR_ALLOC_R][HIT] = 0
+	L2_cache_stats_breakdown[L2_WR_ALLOC_R][HIT_RESERVED] = 0
+	L2_cache_stats_breakdown[L2_WR_ALLOC_R][MISS] = 0
+	L2_cache_stats_breakdown[L2_WR_ALLOC_R][RESERVATION_FAIL] = 0
+	L2_cache_stats_breakdown[L2_WR_ALLOC_R][SECTOR_MISS] = 0
+	L2_cache_stats_breakdown[GLOBAL_ACC_R][TOTAL_ACCESS] = 180152
+	L2_cache_stats_breakdown[CONST_ACC_R][TOTAL_ACCESS] = 30
+	L2_cache_stats_breakdown[GLOBAL_ACC_W][TOTAL_ACCESS] = 212992
+	L2_cache_stats_breakdown[INST_ACC_R][TOTAL_ACCESS] = 360
+L2_total_cache_reservation_fail_breakdown:
+	L2_cache_stats_fail_breakdown[GLOBAL_ACC_R][MISS_QUEUE_FULL] = 1261
+	L2_cache_stats_fail_breakdown[CONST_ACC_R][MSHR_MERGE_ENRTY_FAIL] = 106
+	L2_cache_stats_fail_breakdown[INST_ACC_R][MSHR_MERGE_ENRTY_FAIL] = 740
+L2_cache_data_port_util = 0.107
+L2_cache_fill_port_util = 0.079
+
+icnt_total_pkts_mem_to_simt=393534
+icnt_total_pkts_simt_to_mem=258135
+LD_mem_lat_dist  0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ST_mem_lat_dist  0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+----------------------------Interconnect-DETAILS--------------------------------
+Class 0:
+Packet latency average = 9.97662
+	minimum = 5
+	maximum = 113
+Network latency average = 9.3174
+	minimum = 5
+	maximum = 113
+Slowest packet = 15012
+Flit latency average = 8.49692
+	minimum = 5
+	maximum = 113
+Slowest flit = 17532
+Fragmentation average = 0
+	minimum = 0
+	maximum = 0
+Injected packet rate average = 0.127035
+	minimum = 0.0610449 (at node 14)
+	maximum = 0.209975 (at node 22)
+Accepted packet rate average = 0.127035
+	minimum = 0.0762278 (at node 26)
+	maximum = 0.168105 (at node 10)
+Injected flit rate average = 0.154167
+	minimum = 0.109628 (at node 3)
+	maximum = 0.209975 (at node 22)
+Accepted flit rate average= 0.154167
+	minimum = 0.137266 (at node 19)
+	maximum = 0.168105 (at node 10)
+Injected packet length average = 1.21358
+Accepted packet length average = 1.21358
+Total in-flight flits = 0 (0 measured)
+====== Overall Traffic Statistics ======
+====== Traffic class 0 ======
+Packet latency average = 9.97662 (1 samples)
+	minimum = 5 (1 samples)
+	maximum = 113 (1 samples)
+Network latency average = 9.3174 (1 samples)
+	minimum = 5 (1 samples)
+	maximum = 113 (1 samples)
+Flit latency average = 8.49692 (1 samples)
+	minimum = 5 (1 samples)
+	maximum = 113 (1 samples)
+Fragmentation average = 0 (1 samples)
+	minimum = 0 (1 samples)
+	maximum = 0 (1 samples)
+Injected packet rate average = 0.127035 (1 samples)
+	minimum = 0.0610449 (1 samples)
+	maximum = 0.209975 (1 samples)
+Accepted packet rate average = 0.127035 (1 samples)
+	minimum = 0.0762278 (1 samples)
+	maximum = 0.168105 (1 samples)
+Injected flit rate average = 0.154167 (1 samples)
+	minimum = 0.109628 (1 samples)
+	maximum = 0.209975 (1 samples)
+Accepted flit rate average = 0.154167 (1 samples)
+	minimum = 0.137266 (1 samples)
+	maximum = 0.168105 (1 samples)
+Injected packet size average = 1.21358 (1 samples)
+Accepted packet size average = 1.21358 (1 samples)
+Hops average = 1 (1 samples)
+----------------------------END-of-Interconnect-DETAILS-------------------------
+# warps executed conditional branch and have divergence: 126976
+# warps executed conditional branch(no matter they have divergence or not): 4083712
+
+
+gpgpu_simulation_time = 0 days, 0 hrs, 4 min, 48 sec (288 sec)
+gpgpu_simulation_rate = 364316 (inst/sec)
+gpgpu_simulation_rate = 543 (cycle/sec)
+gpgpu_silicon_slowdown = 1289134x
+GPGPU-Sim: synchronize waiting for inactive GPU simulation
+GPGPU-Sim API: Stream Manager State
+GPGPU-Sim: detected inactive GPU simulation thread
+GPGPU-Sim PTX: Setting up arguments for 8 bytes starting at 0x7fff7e7cbaf8..
+GPGPU-Sim PTX: Setting up arguments for 4 bytes starting at 0x7fff7e7cbaf4..
+GPGPU-Sim PTX: Setting up arguments for 8 bytes starting at 0x7fff7e7cbae8..
+GPGPU-Sim PTX: Setting up arguments for 4 bytes starting at 0x7fff7e7cbaf0..
+GPGPU-Sim PTX: Setting up arguments for 8 bytes starting at 0x7fff7e7cbae0..
+GPGPU-Sim PTX: Setting up arguments for 8 bytes starting at 0x7fff7e7cbad8..
+
+GPGPU-Sim PTX: cudaLaunch for 0x0x402160 (mode=performance simulation) on stream 0
+GPGPU-Sim PTX: finding reconvergence points for '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'...
+GPGPU-Sim PTX: Finding dominators for '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'...
+GPGPU-Sim PTX: Finding immediate dominators for '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'...
+GPGPU-Sim PTX: Finding postdominators for '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'...
+GPGPU-Sim PTX: Finding immediate postdominators for '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'...
+GPGPU-Sim PTX: pre-decoding instructions for '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'...
+GPGPU-Sim PTX: reconvergence points for _Z24bpnn_adjust_weights_cudaPfiS_iS_S_...
+GPGPU-Sim PTX:  1 (potential) branch divergence @  PC=0x1838 (backprop-rodinia-3.5.sm_62.ptx:204) @%p1 bra BB1_2;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x18f8 (backprop-rodinia-3.5.sm_62.ptx:231) ret;
+GPGPU-Sim PTX: ... end of reconvergence points for _Z24bpnn_adjust_weights_cudaPfiS_iS_S_
+GPGPU-Sim PTX: ... done pre-decoding instructions for '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'.
+GPGPU-Sim PTX: pushing kernel '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_' to stream 0, gridDim= (1,4096,1) blockDim = (16,16,1) 
+GPGPU-Sim uArch: Shader 11 bind to kernel 2 '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'
+GPGPU-Sim uArch: CTA/core = 6, limited by: threads regs
+GPGPU-Sim uArch: Shader 12 bind to kernel 2 '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'
+GPGPU-Sim uArch: Shader 13 bind to kernel 2 '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'
+GPGPU-Sim uArch: Shader 14 bind to kernel 2 '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'
+GPGPU-Sim uArch: Shader 0 bind to kernel 2 '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'
+GPGPU-Sim uArch: Shader 1 bind to kernel 2 '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'
+GPGPU-Sim uArch: Shader 2 bind to kernel 2 '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'
+GPGPU-Sim uArch: Shader 3 bind to kernel 2 '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'
+GPGPU-Sim uArch: Shader 4 bind to kernel 2 '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'
+GPGPU-Sim uArch: Shader 5 bind to kernel 2 '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'
+GPGPU-Sim uArch: Shader 6 bind to kernel 2 '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'
+GPGPU-Sim uArch: Shader 7 bind to kernel 2 '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'
+GPGPU-Sim uArch: Shader 8 bind to kernel 2 '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'
+GPGPU-Sim uArch: Shader 9 bind to kernel 2 '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'
+GPGPU-Sim uArch: Shader 10 bind to kernel 2 '_Z24bpnn_adjust_weights_cudaPfiS_iS_S_'
+Destroy streams for kernel 2: size 0
+kernel_name = _Z24bpnn_adjust_weights_cudaPfiS_iS_S_ 
+kernel_launch_uid = 2 
+gpu_sim_cycle = 133322
+gpu_sim_insn = 56623456
+gpu_ipc =     424.7120
+gpu_tot_sim_cycle = 289879
+gpu_tot_sim_insn = 161546592
+gpu_tot_ipc =     557.2897
+gpu_tot_issued_cta = 8192
+gpu_occupancy = 94.6266% 
+gpu_tot_occupancy = 96.9062% 
+max_total_param_size = 0
+gpu_stall_dramfull = 6762
+gpu_stall_icnt2sh    = 14177
+partiton_level_parallism =       1.6939
+partiton_level_parallism_total  =       1.2739
+partiton_level_parallism_util =       2.0600
+partiton_level_parallism_util_total  =       1.8271
+L2_BW  =     124.2425 GB/Sec
+L2_BW_total  =      87.5518 GB/Sec
+gpu_total_sim_rate=295331
+
+========= Core cache stats =========
+L1I_cache:
+	L1I_total_cache_accesses = 3121163
+	L1I_total_cache_misses = 4208
+	L1I_total_cache_miss_rate = 0.0013
+	L1I_total_cache_pending_hits = 0
+	L1I_total_cache_reservation_fails = 7370
+L1D_cache:
+	L1D_cache_core[0]: Access = 44113, Miss = 16434, Miss_rate = 0.373, Pending_hits = 8491, Reservation_fails = 9577
+	L1D_cache_core[1]: Access = 44543, Miss = 16588, Miss_rate = 0.372, Pending_hits = 8532, Reservation_fails = 7584
+	L1D_cache_core[2]: Access = 44268, Miss = 16403, Miss_rate = 0.371, Pending_hits = 8357, Reservation_fails = 8231
+	L1D_cache_core[3]: Access = 43612, Miss = 16242, Miss_rate = 0.372, Pending_hits = 8300, Reservation_fails = 13156
+	L1D_cache_core[4]: Access = 44194, Miss = 16393, Miss_rate = 0.371, Pending_hits = 8451, Reservation_fails = 8156
+	L1D_cache_core[5]: Access = 43741, Miss = 16293, Miss_rate = 0.372, Pending_hits = 8323, Reservation_fails = 12740
+	L1D_cache_core[6]: Access = 43411, Miss = 16210, Miss_rate = 0.373, Pending_hits = 8252, Reservation_fails = 12327
+	L1D_cache_core[7]: Access = 43979, Miss = 16403, Miss_rate = 0.373, Pending_hits = 8475, Reservation_fails = 10097
+	L1D_cache_core[8]: Access = 44119, Miss = 16470, Miss_rate = 0.373, Pending_hits = 8478, Reservation_fails = 11762
+	L1D_cache_core[9]: Access = 44391, Miss = 16498, Miss_rate = 0.372, Pending_hits = 8482, Reservation_fails = 6341
+	L1D_cache_core[10]: Access = 44489, Miss = 16598, Miss_rate = 0.373, Pending_hits = 8614, Reservation_fails = 9867
+	L1D_cache_core[11]: Access = 44223, Miss = 16525, Miss_rate = 0.374, Pending_hits = 8554, Reservation_fails = 7834
+	L1D_cache_core[12]: Access = 44007, Miss = 16450, Miss_rate = 0.374, Pending_hits = 8501, Reservation_fails = 11563
+	L1D_cache_core[13]: Access = 44326, Miss = 16484, Miss_rate = 0.372, Pending_hits = 8511, Reservation_fails = 9301
+	L1D_cache_core[14]: Access = 44095, Miss = 16433, Miss_rate = 0.373, Pending_hits = 8438, Reservation_fails = 10981
+	L1D_total_cache_accesses = 661511
+	L1D_total_cache_misses = 246424
+	L1D_total_cache_miss_rate = 0.3725
+	L1D_total_cache_pending_hits = 126759
+	L1D_total_cache_reservation_fails = 149517
+	L1D_cache_data_port_util = 0.066
+	L1D_cache_fill_port_util = 0.032
+L1C_cache:
+	L1C_total_cache_accesses = 294912
+	L1C_total_cache_misses = 480
+	L1C_total_cache_miss_rate = 0.0016
+	L1C_total_cache_pending_hits = 0
+	L1C_total_cache_reservation_fails = 3254
+L1T_cache:
+	L1T_total_cache_accesses = 0
+	L1T_total_cache_misses = 0
+	L1T_total_cache_pending_hits = 0
+	L1T_total_cache_reservation_fails = 0
+
+Total_core_cache_stats:
+	Total_core_cache_stats_breakdown[GLOBAL_ACC_R][HIT] = 165662
+	Total_core_cache_stats_breakdown[GLOBAL_ACC_R][HIT_RESERVED] = 126738
+	Total_core_cache_stats_breakdown[GLOBAL_ACC_R][MISS] = 139733
+	Total_core_cache_stats_breakdown[GLOBAL_ACC_R][RESERVATION_FAIL] = 148231
+	Total_core_cache_stats_breakdown[GLOBAL_ACC_R][SECTOR_MISS] = 0
+	Total_core_cache_stats_breakdown[LOCAL_ACC_R][HIT] = 0
+	Total_core_cache_stats_breakdown[LOCAL_ACC_R][HIT_RESERVED] = 0
+	Total_core_cache_stats_breakdown[LOCAL_ACC_R][MISS] = 0
+	Total_core_cache_stats_breakdown[LOCAL_ACC_R][RESERVATION_FAIL] = 0
+	Total_core_cache_stats_breakdown[LOCAL_ACC_R][SECTOR_MISS] = 0
+	Total_core_cache_stats_breakdown[CONST_ACC_R][HIT] = 294432
+	Total_core_cache_stats_breakdown[CONST_ACC_R][HIT_RESERVED] = 0
+	Total_core_cache_stats_breakdown[CONST_ACC_R][MISS] = 480
+	Total_core_cache_stats_breakdown[CONST_ACC_R][RESERVATION_FAIL] = 3254
+	Total_core_cache_stats_breakdown[CONST_ACC_R][SECTOR_MISS] = 0
+	Total_core_cache_stats_breakdown[TEXTURE_ACC_R][HIT] = 0
+	Total_core_cache_stats_breakdown[TEXTURE_ACC_R][HIT_RESERVED] = 0
+	Total_core_cache_stats_breakdown[TEXTURE_ACC_R][MISS] = 0
+	Total_core_cache_stats_breakdown[TEXTURE_ACC_R][RESERVATION_FAIL] = 0
+	Total_core_cache_stats_breakdown[TEXTURE_ACC_R][SECTOR_MISS] = 0
+	Total_core_cache_stats_breakdown[GLOBAL_ACC_W][HIT] = 122666
+	Total_core_cache_stats_breakdown[GLOBAL_ACC_W][HIT_RESERVED] = 21
+	Total_core_cache_stats_breakdown[GLOBAL_ACC_W][MISS] = 106691
+	Total_core_cache_stats_breakdown[GLOBAL_ACC_W][RESERVATION_FAIL] = 1286
+	Total_core_cache_stats_breakdown[GLOBAL_ACC_W][SECTOR_MISS] = 0
+	Total_core_cache_stats_breakdown[LOCAL_ACC_W][HIT] = 0
+	Total_core_cache_stats_breakdown[LOCAL_ACC_W][HIT_RESERVED] = 0
+	Total_core_cache_stats_breakdown[LOCAL_ACC_W][MISS] = 0
+	Total_core_cache_stats_breakdown[LOCAL_ACC_W][RESERVATION_FAIL] = 0
+	Total_core_cache_stats_breakdown[LOCAL_ACC_W][SECTOR_MISS] = 0
+	Total_core_cache_stats_breakdown[L1_WRBK_ACC][HIT] = 0
+	Total_core_cache_stats_breakdown[L1_WRBK_ACC][HIT_RESERVED] = 0
+	Total_core_cache_stats_breakdown[L1_WRBK_ACC][MISS] = 0
+	Total_core_cache_stats_breakdown[L1_WRBK_ACC][RESERVATION_FAIL] = 0
+	Total_core_cache_stats_breakdown[L1_WRBK_ACC][SECTOR_MISS] = 0
+	Total_core_cache_stats_breakdown[L2_WRBK_ACC][HIT] = 0
+	Total_core_cache_stats_breakdown[L2_WRBK_ACC][HIT_RESERVED] = 0
+	Total_core_cache_stats_breakdown[L2_WRBK_ACC][MISS] = 0
+	Total_core_cache_stats_breakdown[L2_WRBK_ACC][RESERVATION_FAIL] = 0
+	Total_core_cache_stats_breakdown[L2_WRBK_ACC][SECTOR_MISS] = 0
+	Total_core_cache_stats_breakdown[INST_ACC_R][HIT] = 3116955
+	Total_core_cache_stats_breakdown[INST_ACC_R][HIT_RESERVED] = 0
+	Total_core_cache_stats_breakdown[INST_ACC_R][MISS] = 4208
+	Total_core_cache_stats_breakdown[INST_ACC_R][RESERVATION_FAIL] = 7370
+	Total_core_cache_stats_breakdown[INST_ACC_R][SECTOR_MISS] = 0
+	Total_core_cache_stats_breakdown[L1_WR_ALLOC_R][HIT] = 0
+	Total_core_cache_stats_breakdown[L1_WR_ALLOC_R][HIT_RESERVED] = 0
+	Total_core_cache_stats_breakdown[L1_WR_ALLOC_R][MISS] = 0
+	Total_core_cache_stats_breakdown[L1_WR_ALLOC_R][RESERVATION_FAIL] = 0
+	Total_core_cache_stats_breakdown[L1_WR_ALLOC_R][SECTOR_MISS] = 0
+	Total_core_cache_stats_breakdown[L2_WR_ALLOC_R][HIT] = 0
+	Total_core_cache_stats_breakdown[L2_WR_ALLOC_R][HIT_RESERVED] = 0
+	Total_core_cache_stats_breakdown[L2_WR_ALLOC_R][MISS] = 0
+	Total_core_cache_stats_breakdown[L2_WR_ALLOC_R][RESERVATION_FAIL] = 0
+	Total_core_cache_stats_breakdown[L2_WR_ALLOC_R][SECTOR_MISS] = 0
+	Total_core_cache_stats_breakdown[GLOBAL_ACC_R][TOTAL_ACCESS] = 432133
+	Total_core_cache_stats_breakdown[CONST_ACC_R][TOTAL_ACCESS] = 294912
+	Total_core_cache_stats_breakdown[GLOBAL_ACC_W][TOTAL_ACCESS] = 229378
+	Total_core_cache_stats_breakdown[INST_ACC_R][TOTAL_ACCESS] = 3121163
+
+Total_core_cache_fail_stats:
+	Total_core_cache_fail_stats_breakdown[GLOBAL_ACC_R][LINE_ALLOC_FAIL] = 23706
+	Total_core_cache_fail_stats_breakdown[GLOBAL_ACC_R][MISS_QUEUE_FULL] = 2206
+	Total_core_cache_fail_stats_breakdown[GLOBAL_ACC_R][MSHR_MERGE_ENRTY_FAIL] = 122319
+	Total_core_cache_fail_stats_breakdown[CONST_ACC_R][MSHR_MERGE_ENRTY_FAIL] = 3254
+	Total_core_cache_fail_stats_breakdown[GLOBAL_ACC_W][MISS_QUEUE_FULL] = 1286
+	Total_core_cache_fail_stats_breakdown[INST_ACC_R][MSHR_MERGE_ENRTY_FAIL] = 7370
+ctas_completed 8192, Shader 0 warp_id issue ditsribution:
+warp_id:
+0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 
+distro:
+9338, 7820, 8326, 7820, 8832, 7820, 8326, 7820, 9338, 7820, 8326, 7820, 8832, 7820, 8326, 7820, 9284, 7766, 8272, 7766, 8778, 7766, 8272, 7766, 9135, 7650, 8145, 7650, 8640, 7650, 8145, 7650, 9135, 7650, 8145, 7650, 8640, 7650, 8145, 7650, 9189, 7704, 8199, 7704, 8694, 7704, 8199, 7704, 
+gpgpu_n_tot_thrd_icount = 188351200
+gpgpu_n_tot_w_icount = 5885975
+gpgpu_n_stall_shd_mem = 295350
+gpgpu_n_mem_read_local = 0
+gpgpu_n_mem_write_local = 0
+gpgpu_n_mem_read_global = 139733
+gpgpu_n_mem_write_global = 229378
+gpgpu_n_mem_texture = 0
+gpgpu_n_mem_const = 15
+# of global memory access: 718087
+# of local memory access: 0
+gpgpu_n_load_insn  = 8454224
+gpgpu_n_store_insn = 3211296
+gpgpu_n_shmem_insn = 8323072
+gpgpu_n_sstarr_insn = 0
+gpgpu_n_tex_insn = 0
+gpgpu_n_const_mem_insn = 0
+gpgpu_n_param_mem_insn = 9437184
+gpgpu_n_shmem_bkconflict = 0
+gpgpu_n_cache_bkconflict = 0
+gpgpu_n_intrawarp_mshr_merge = 0
+gpgpu_n_cmem_portconflict = 3254
+gpgpu_stall_shd_mem[c_mem][resource_stall] = 3254
+gpgpu_stall_shd_mem[s_mem][bk_conf] = 0
+gpgpu_stall_shd_mem[gl_mem][resource_stall] = 56576
+gpgpu_stall_shd_mem[gl_mem][coal_stall] = 235520
+gpgpu_stall_shd_mem[gl_mem][data_port_stall] = 0
+gpu_reg_bank_conflict_stalls = 0
+Warp Occupancy Distribution:
+Stall:562642	W0_Idle:27646	W0_Scoreboard:2202421	W1:0	W2:425984	W3:0	W4:0	W5:0	W6:0	W7:0	W8:0	W9:0	W10:0	W11:0	W12:0	W13:0	W14:0	W15:0	W16:675863	W17:0	W18:0	W19:0	W20:0	W21:0	W22:0	W23:0	W24:0	W25:0	W26:0	W27:0	W28:0	W29:0	W30:0	W31:0	W32:4784128
+single_issue_nums: WS0:3100695	WS1:2785280	
+dual_issue_nums: WS0:0	WS1:0	
+traffic_breakdown_coretomem[CONST_ACC_R] = 120 {8:15,}
+traffic_breakdown_coretomem[GLOBAL_ACC_R] = 1117864 {8:139733,}
+traffic_breakdown_coretomem[GLOBAL_ACC_W] = 20185360 {40:81920,72:49152,136:98306,}
+traffic_breakdown_coretomem[INST_ACC_R] = 1200 {8:150,}
+traffic_breakdown_memtocore[CONST_ACC_R] = 1200 {40:30,}
+traffic_breakdown_memtocore[GLOBAL_ACC_R] = 22357280 {40:558932,}
+traffic_breakdown_memtocore[GLOBAL_ACC_W] = 4587584 {8:573448,}
+traffic_breakdown_memtocore[INST_ACC_R] = 24000 {40:600,}
+maxmflatency = 1273 
+max_icnt2mem_latency = 940 
+maxmrqlatency = 720 
+max_icnt2sh_latency = 200 
+averagemflatency = 276 
+avg_icnt2mem_latency = 17 
+avg_mrq_latency = 93 
+avg_icnt2sh_latency = 21 
+mrq_lat_table:51979 	18876 	22040 	30996 	75268 	80437 	95254 	109390 	44187 	437 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	
+dq_lat_table:0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	
+mf_lat_table:0 	0 	0 	0 	0 	0 	0 	675037 	308240 	148419 	714 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	
+icnt2mem_lat_table:0 	0 	75 	52 	28 	337130 	25409 	3319 	2684 	579 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	
+icnt2sh_lat_table:0 	0 	290758 	402621 	232426 	139692 	54998 	11915 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	
+mf_lat_pw_table:0 	0 	0 	0 	0 	0 	0 	312 	263 	1 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	0 	
+maximum concurrent accesses to same row:
+dram[0]:       128       120       128       128       128       128       128       128       128       128       128       128       143       145       128       128 
+dram[1]:       120       120       128       128       128       128       128       128       128       128       128       128       144       145       128       128 
+dram[2]:       120       120       128       128       128       128       128       128       128       128       128       128       145       145       128       128 
+dram[3]:       115       128       128       128       128       128       128       128       128       128       128       128       144       143       128       128 
+dram[4]:       128       128       128       128       128       128       128       128       128       128       128       128       144       143       128       128 
+dram[5]:       120       128       128       128       128       128       128       128       128       128       128       128       144       144       128       128 
+maximum service time to same row:
+dram[0]:     12404     12591     13734     13938     13615     13727     13520     13400     13713     13378     13765     13963     15482     15649     17177     17465 
+dram[1]:     12262     12455     13751     14083     13652     13717     13555     13396     13725     13519     13762     14018     15481     15629     17209     17163 
+dram[2]:     12377     12421     13680     14100     13647     13763     13525     13487     13616     13595     13875     14034     15504     15631     17254     17152 
+dram[3]:     12704     12500     14028     14214     13716     13622     13513     13515     13625     13596     13874     13979     15512     15646     17260     17060 
+dram[4]:     12454     12510     14036     14210     13700     13423     13522     13502     13425     13612     13877     13899     15525     15649     17266     17172 
+dram[5]:     12427     12496     13907     14154     13712     13329     13397     13543     13415     13617     13897     13893     15677     15781     17265     17178 
+average row accesses per activate:
+dram[0]: 13.567902 13.415234 12.736597 13.257281 12.853773 12.708625 12.798122 13.038278 12.942720 12.697892 13.665025 13.219048 15.018666 15.139785 13.473684 13.871922 
+dram[1]: 13.641791 13.716081 12.706977 11.975877 12.414578 13.297561 12.679070 12.615741 13.165049 12.668224 12.962617 13.617647 14.666667 15.304348 14.009951 13.770171 
+dram[2]: 13.520988 12.926714 12.589862 13.031026 12.645012 12.504587 12.008811 12.247191 12.550926 12.878860 13.272727 13.274463 14.821053 15.472528 14.044888 13.837838 
+dram[3]: 12.868236 13.371638 12.947867 12.638889 12.304740 12.533334 12.224216 12.192393 12.407323 12.609303 13.939698 13.402410 14.009951 14.978724 12.770975 13.669903 
+dram[4]: 13.294404 14.129199 13.389706 12.522936 12.115556 13.297561 12.304740 12.703962 12.668224 13.454094 13.545232 13.211401 14.552972 15.954674 14.080000 14.478149 
+dram[5]: 13.512376 14.170984 12.357466 12.786885 12.798122 13.664161 12.471395 12.586605 13.420792 13.155340 13.394673 12.845265 15.515152 15.058824 14.044888 14.222222 
+average row locality = 528864/39802 = 13.287373
+number of total memory accesses made:
+dram[0]:         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0 
+dram[1]:         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0 
+dram[2]:         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0 
+dram[3]:         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0 
+dram[4]:         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0 
+dram[5]:         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0 
+total accesses: 0
+min_bank_accesses = 0!
+min_chip_accesses = 0!
+number of total read accesses:
+dram[0]:         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0 
+dram[1]:         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0 
+dram[2]:         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0 
+dram[3]:         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0 
+dram[4]:         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0 
+dram[5]:         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0 
+total dram reads = 0
+min_bank_accesses = 0!
+min_chip_accesses = 0!
+number of total write accesses:
+dram[0]:      1962      1960      1968      1964      1940      1944      1944      1940      1886      1884      1976      1983      2048      2048      2048      2048 
+dram[1]:      1960      1958      1968      1962      1940      1944      1944      1940      1888      1884      1976      1984      2048      2048      2048      2048 
+dram[2]:      1960      1960      1968      1960      1940      1944      1944      1940      1884      1884      1976      1988      2048      2048      2048      2048 
+dram[3]:      1962      1962      1968      1960      1942      1944      1944      1940      1884      1884      1976      1988      2048      2048      2048      2048 
+dram[4]:      1960      1960      1966      1960      1944      1944      1942      1940      1884      1884      1976      1988      2048      2048      2048      2048 
+dram[5]:      1958      1964      1964      1960      1944      1944      1940      1940      1884      1880      1976      1988      2048      2048      2048      2048 
+total dram writes = 189243
+bank skew: 2048/1880 = 1.09
+chip skew: 31546/31534 = 1.00
+average mf latency per bank:
+dram[0]:       1712      1703      1677      1674      1656      1635      1679      1659      1734      1738      1665      1636      1683      1675      1602      1621
+dram[1]:       1591      1678      1585      1608      1634      1611      1602      1587      1631      1649      1562      1635      1582      1592      1568      1541
+dram[2]:       1574      1629      1596      1612      1597      1580      1548      1567      1646      1642      1622      1622      1649      1626      1556      1553
+dram[3]:       1620      1634      1659      1667      1643      1687      1649      1660      1733      1661      1652      1622      1620      1630      1558      1567
+dram[4]:       1687      1712      1703      1699      1762      1722      1780      1746      1835      1808      1673      1687      1682      1673      1638      1640
+dram[5]:       1648      1735      1694      1709      1727      1705      1690      1708      1775      1764      1694      1712      1741      1687      1632      1635
+maximum mf latency per bank:
+dram[0]:       1126      1053      1081      1140      1024       903      1100      1132      1123      1162      1022      1092      1166      1117      1124      1025
+dram[1]:        962       990       907       950      1081       842      1002       826       894       849       839       960      1001       926       992       897
+dram[2]:       1016       983       883       976       867       837       804       802       922       966       898      1109      1086      1067       999       937
+dram[3]:        954      1081      1012      1128       874      1127      1100       946       972       911       982      1118       892      1105       972       910
+dram[4]:       1154      1090       984      1069      1133      1116      1031      1227      1120      1075      1046      1079       877       966      1056      1142
+dram[5]:       1103      1074       986      1052      1137       990       995      1035      1059      1203      1099      1156      1273      1050      1040      1142
+Memory Partition 0: 
+Cache L2_bank_000:
+MSHR contents
+
+Cache L2_bank_001:
+MSHR contents
+
+In Dram Latency Queue (total = 0): 
+DRAM[0]: 16 bks, busW=4 BL=8 CL=12, tRRD=6 tCCD=2, tRCD=12 tRAS=28 tRP=12 tRC=40
+n_cmd=382638 n_nop=265841 n_act=6601 n_pre=6585 n_ref_event=17071712 n_req=88158 n_rd=72386 n_rd_L2_A=0 n_write=0 n_wr_bk=31543 bw_util=0.5432
+n_activity=319751 dram_eff=0.6501
+bk0: 4514a 335585i bk1: 4480a 336049i bk2: 4480a 336388i bk3: 4480a 338236i bk4: 4480a 335811i bk5: 4480a 335241i bk6: 4480a 335788i bk7: 4480a 339102i bk8: 4480a 337171i bk9: 4480a 336199i bk10: 4560a 336053i bk11: 4560a 336684i bk12: 4608a 334004i bk13: 4608a 335905i bk14: 4608a 334845i bk15: 4608a 335269i 
+
+------------------------------------------------------------------------
+
+Row_Buffer_Locality = 0.925214
+Row_Buffer_Locality_read = 0.954577
+Row_Buffer_Locality_write = 0.790451
+Bank_Level_Parallism = 2.727104
+Bank_Level_Parallism_Col = 0.000000
+Bank_Level_Parallism_Ready = 1.367887
+write_to_read_ratio_blp_rw_average = 0.000000
+GrpLevelPara = 0.000000 
+
+BW Util details:
+bwutil = 0.543224 
+total_CMD = 382638 
+util_bw = 207858 
+Wasted_Col = 77134 
+Wasted_Row = 19492 
+Idle = 78154 
+
+BW Util Bottlenecks: 
+RCDc_limit = 19886 
+RCDWRc_limit = 9196 
+WTRc_limit = 18058 
+RTWc_limit = 58050 
+CCDLc_limit = 46056 
+rwq = 0 
+CCDLc_limit_alone = 37138 
+WTRc_limit_alone = 16869 
+RTWc_limit_alone = 50321 
+
+Commands details: 
+total_CMD = 382638 
+n_nop = 265841 
+Read = 72386 
+Write = 0 
+L2_Alloc = 0 
+L2_WB = 31543 
+n_act = 6601 
+n_pre = 6585 
+n_ref = 17071712 
+n_req = 88158 
+total_req = 103929 
+
+Dual Bus Interface Util: 
+issued_total_row = 13186 
+issued_total_col = 103929 
+Row_Bus_Util =  0.034461 
+CoL_Bus_Util = 0.271612 
+Either_Row_CoL_Bus_Util = 0.305241 
+Issued_on_Two_Bus_Simul_Util = 0.000831 
+issued_two_Eff = 0.002723 
+queue_avg = 28.060629 
+
+
+dram_util_bins: 0 0 0 0 0 0 0 0 0 0
+dram_eff_bins: 0 0 0 0 0 0 0 0 0 0
+mrqq: max=64 avg=28.0606
+Memory Partition 1: 
+Cache L2_bank_002:
+MSHR contents
+
+Cache L2_bank_003:
+MSHR contents
+
+In Dram Latency Queue (total = 0): 
+DRAM[1]: 16 bks, busW=4 BL=8 CL=12, tRRD=6 tCCD=2, tRCD=12 tRAS=28 tRP=12 tRC=40
+n_cmd=382638 n_nop=265806 n_act=6644 n_pre=6628 n_ref_event=17916352 n_req=88150 n_rd=72380 n_rd_L2_A=0 n_write=0 n_wr_bk=31540 bw_util=0.5432
+n_activity=318705 dram_eff=0.6521
+bk0: 4504a 335170i bk1: 4480a 336606i bk2: 4480a 336757i bk3: 4480a 334634i bk4: 4480a 335403i bk5: 4480a 334507i bk6: 4480a 334272i bk7: 4480a 335581i bk8: 4480a 336197i bk9: 4480a 335725i bk10: 4560a 335960i bk11: 4564a 336289i bk12: 4608a 333393i bk13: 4608a 334320i bk14: 4608a 334960i bk15: 4608a 333818i 
+
+------------------------------------------------------------------------
+
+Row_Buffer_Locality = 0.924719
+Row_Buffer_Locality_read = 0.955250
+Row_Buffer_Locality_write = 0.784591
+Bank_Level_Parallism = 2.789021
+Bank_Level_Parallism_Col = 2.533341
+Bank_Level_Parallism_Ready = 1.388225
+write_to_read_ratio_blp_rw_average = 0.454378
+GrpLevelPara = 2.200891 
+
+BW Util details:
+bwutil = 0.543177 
+total_CMD = 382638 
+util_bw = 207840 
+Wasted_Col = 76578 
+Wasted_Row = 18572 
+Idle = 79648 
+
+BW Util Bottlenecks: 
+RCDc_limit = 19475 
+RCDWRc_limit = 9274 
+WTRc_limit = 17243 
+RTWc_limit = 60637 
+CCDLc_limit = 46176 
+rwq = 0 
+CCDLc_limit_alone = 37140 
+WTRc_limit_alone = 16117 
+RTWc_limit_alone = 52727 
+
+Commands details: 
+total_CMD = 382638 
+n_nop = 265806 
+Read = 72380 
+Write = 0 
+L2_Alloc = 0 
+L2_WB = 31540 
+n_act = 6644 
+n_pre = 6628 
+n_ref = 17916352 
+n_req = 88150 
+total_req = 103920 
+
+Dual Bus Interface Util: 
+issued_total_row = 13272 
+issued_total_col = 103920 
+Row_Bus_Util =  0.034686 
+CoL_Bus_Util = 0.271588 
+Either_Row_CoL_Bus_Util = 0.305333 
+Issued_on_Two_Bus_Simul_Util = 0.000941 
+issued_two_Eff = 0.003081 
+queue_avg = 27.989885 
+
+
+dram_util_bins: 0 0 0 0 0 0 0 0 0 0
+dram_eff_bins: 0 0 0 0 0 0 0 0 0 0
+mrqq: max=64 avg=27.9899
+Memory Partition 2: 
+Cache L2_bank_004:
+MSHR contents
+
+Cache L2_bank_005:
+MSHR contents
+
+In Dram Latency Queue (total = 0): 
+DRAM[2]: 16 bks, busW=4 BL=8 CL=12, tRRD=6 tCCD=2, tRCD=12 tRAS=28 tRP=12 tRC=40
+n_cmd=382638 n_nop=265679 n_act=6696 n_pre=6680 n_ref_event=4573281077806086524 n_req=88154 n_rd=72384 n_rd_L2_A=0 n_write=0 n_wr_bk=31540 bw_util=0.5432
+n_activity=317788 dram_eff=0.654
+bk0: 4496a 336430i bk1: 4488a 334365i bk2: 4480a 335496i bk3: 4480a 335628i bk4: 4480a 336766i bk5: 4480a 334070i bk6: 4480a 335062i bk7: 4480a 335824i bk8: 4480a 333825i bk9: 4480a 335915i bk10: 4560a 335867i bk11: 4568a 336143i bk12: 4608a 333766i bk13: 4608a 334615i bk14: 4608a 334912i bk15: 4608a 334833i 
+
+------------------------------------------------------------------------
+
+Row_Buffer_Locality = 0.924121
+Row_Buffer_Locality_read = 0.954852
+Row_Buffer_Locality_write = 0.783069
+Bank_Level_Parallism = 2.794508
+Bank_Level_Parallism_Col = 2.590086
+Bank_Level_Parallism_Ready = 1.364583
+write_to_read_ratio_blp_rw_average = 0.459624
+GrpLevelPara = 2.209723 
+
+BW Util details:
+bwutil = 0.543198 
+total_CMD = 382638 
+util_bw = 207848 
+Wasted_Col = 76776 
+Wasted_Row = 17746 
+Idle = 80268 
+
+BW Util Bottlenecks: 
+RCDc_limit = 19240 
+RCDWRc_limit = 9062 
+WTRc_limit = 17552 
+RTWc_limit = 62942 
+CCDLc_limit = 47180 
+rwq = 0 
+CCDLc_limit_alone = 37916 
+WTRc_limit_alone = 16455 
+RTWc_limit_alone = 54775 
+
+Commands details: 
+total_CMD = 382638 
+n_nop = 265679 
+Read = 72384 
+Write = 0 
+L2_Alloc = 0 
+L2_WB = 31540 
+n_act = 6696 
+n_pre = 6680 
+n_ref = 4573281077806086524 
+n_req = 88154 
+total_req = 103924 
+
+Dual Bus Interface Util: 
+issued_total_row = 13376 
+issued_total_col = 103924 
+Row_Bus_Util =  0.034957 
+CoL_Bus_Util = 0.271599 
+Either_Row_CoL_Bus_Util = 0.305665 
+Issued_on_Two_Bus_Simul_Util = 0.000891 
+issued_two_Eff = 0.002916 
+queue_avg = 28.059477 
+
+
+dram_util_bins: 0 0 0 0 0 0 0 0 0 0
+dram_eff_bins: 0 0 0 0 0 0 0 0 0 0
+mrqq: max=64 avg=28.0595
+Memory Partition 3: 
+Cache L2_bank_006:
+MSHR contents
+
+Cache L2_bank_007:
+MSHR contents
+
+In Dram Latency Queue (total = 0): 
+DRAM[3]: 16 bks, busW=4 BL=8 CL=12, tRRD=6 tCCD=2, tRCD=12 tRAS=28 tRP=12 tRC=40
+n_cmd=382638 n_nop=265553 n_act=6778 n_pre=6762 n_ref_event=0 n_req=88149 n_rd=72376 n_rd_L2_A=0 n_write=0 n_wr_bk=31546 bw_util=0.5432
+n_activity=317976 dram_eff=0.6536
+bk0: 4488a 334804i bk1: 4488a 335000i bk2: 4480a 335804i bk3: 4480a 337046i bk4: 4480a 335164i bk5: 4480a 334445i bk6: 4480a 334844i bk7: 4480a 335722i bk8: 4480a 335507i bk9: 4480a 335757i bk10: 4560a 335997i bk11: 4568a 335511i bk12: 4608a 333296i bk13: 4608a 334789i bk14: 4608a 332898i bk15: 4608a 332091i 
+
+------------------------------------------------------------------------
+
+Row_Buffer_Locality = 0.923198
+Row_Buffer_Locality_read = 0.955027
+Row_Buffer_Locality_write = 0.777151
+Bank_Level_Parallism = 2.806891
+Bank_Level_Parallism_Col = 2.535072
+Bank_Level_Parallism_Ready = 1.366978
+write_to_read_ratio_blp_rw_average = 0.461114
+GrpLevelPara = 2.225716 
+
+BW Util details:
+bwutil = 0.543187 
+total_CMD = 382638 
+util_bw = 207844 
+Wasted_Col = 76534 
+Wasted_Row = 18474 
+Idle = 79786 
+
+BW Util Bottlenecks: 
+RCDc_limit = 19139 
+RCDWRc_limit = 9305 
+WTRc_limit = 18277 
+RTWc_limit = 61056 
+CCDLc_limit = 46032 
+rwq = 0 
+CCDLc_limit_alone = 37463 
+WTRc_limit_alone = 17274 
+RTWc_limit_alone = 53490 
+
+Commands details: 
+total_CMD = 382638 
+n_nop = 265553 
+Read = 72376 
+Write = 0 
+L2_Alloc = 0 
+L2_WB = 31546 
+n_act = 6778 
+n_pre = 6762 
+n_ref = 0 
+n_req = 88149 
+total_req = 103922 
+
+Dual Bus Interface Util: 
+issued_total_row = 13540 
+issued_total_col = 103922 
+Row_Bus_Util =  0.035386 
+CoL_Bus_Util = 0.271594 
+Either_Row_CoL_Bus_Util = 0.305994 
+Issued_on_Two_Bus_Simul_Util = 0.000985 
+issued_two_Eff = 0.003220 
+queue_avg = 28.171894 
+
+
+dram_util_bins: 0 0 0 0 0 0 0 0 0 0
+dram_eff_bins: 0 0 0 0 0 0 0 0 0 0
+mrqq: max=64 avg=28.1719
+Memory Partition 4: 
+Cache L2_bank_008:
+MSHR contents
+
+Cache L2_bank_009:
+MSHR contents
+
+In Dram Latency Queue (total = 0): 
+DRAM[4]: 16 bks, busW=4 BL=8 CL=12, tRRD=6 tCCD=2, tRCD=12 tRAS=28 tRP=12 tRC=40
+n_cmd=382638 n_nop=265962 n_act=6572 n_pre=6556 n_ref_event=0 n_req=88134 n_rd=72364 n_rd_L2_A=0 n_write=0 n_wr_bk=31540 bw_util=0.5431
+n_activity=318699 dram_eff=0.6521
+bk0: 4484a 334723i bk1: 4488a 336336i bk2: 4480a 337844i bk3: 4480a 335509i bk4: 4480a 334836i bk5: 4480a 335166i bk6: 4480a 336490i bk7: 4480a 337277i bk8: 4480a 335515i bk9: 4480a 334916i bk10: 4552a 336933i bk11: 4568a 335671i bk12: 4608a 333670i bk13: 4608a 334682i bk14: 4608a 334431i bk15: 4608a 335489i 
+
+------------------------------------------------------------------------
+
+Row_Buffer_Locality = 0.925523
+Row_Buffer_Locality_read = 0.955973
+Row_Buffer_Locality_write = 0.785796
+Bank_Level_Parallism = 2.766631
+Bank_Level_Parallism_Col = 2.513365
+Bank_Level_Parallism_Ready = 1.362406
+write_to_read_ratio_blp_rw_average = 0.457448
+GrpLevelPara = 2.195711 
+
+BW Util details:
+bwutil = 0.543093 
+total_CMD = 382638 
+util_bw = 207808 
+Wasted_Col = 76866 
+Wasted_Row = 18773 
+Idle = 79191 
+
+BW Util Bottlenecks: 
+RCDc_limit = 18939 
+RCDWRc_limit = 9279 
+WTRc_limit = 17971 
+RTWc_limit = 59361 
+CCDLc_limit = 46253 
+rwq = 0 
+CCDLc_limit_alone = 37672 
+WTRc_limit_alone = 16930 
+RTWc_limit_alone = 51821 
+
+Commands details: 
+total_CMD = 382638 
+n_nop = 265962 
+Read = 72364 
+Write = 0 
+L2_Alloc = 0 
+L2_WB = 31540 
+n_act = 6572 
+n_pre = 6556 
+n_ref = 0 
+n_req = 88134 
+total_req = 103904 
+
+Dual Bus Interface Util: 
+issued_total_row = 13128 
+issued_total_col = 103904 
+Row_Bus_Util =  0.034309 
+CoL_Bus_Util = 0.271546 
+Either_Row_CoL_Bus_Util = 0.304925 
+Issued_on_Two_Bus_Simul_Util = 0.000930 
+issued_two_Eff = 0.003051 
+queue_avg = 28.413330 
+
+
+dram_util_bins: 0 0 0 0 0 0 0 0 0 0
+dram_eff_bins: 0 0 0 0 0 0 0 0 0 0
+mrqq: max=64 avg=28.4133
+Memory Partition 5: 
+Cache L2_bank_010:
+MSHR contents
+
+Cache L2_bank_011:
+MSHR contents
+
+In Dram Latency Queue (total = 0): 
+DRAM[5]: 16 bks, busW=4 BL=8 CL=12, tRRD=6 tCCD=2, tRCD=12 tRAS=28 tRP=12 tRC=40
+n_cmd=382638 n_nop=265971 n_act=6558 n_pre=6542 n_ref_event=51680 n_req=88119 n_rd=72352 n_rd_L2_A=0 n_write=0 n_wr_bk=31534 bw_util=0.543
+n_activity=318306 dram_eff=0.6527
+bk0: 4480a 336540i bk1: 4488a 336271i bk2: 4480a 336482i bk3: 4480a 337938i bk4: 4480a 335006i bk5: 4480a 335422i bk6: 4480a 337158i bk7: 4480a 338252i bk8: 4480a 336178i bk9: 4480a 335796i bk10: 4544a 336930i bk11: 4568a 333652i bk12: 4608a 335173i bk13: 4608a 334877i bk14: 4608a 334446i bk15: 4608a 336184i 
+
+------------------------------------------------------------------------
+
+Row_Buffer_Locality = 0.925669
+Row_Buffer_Locality_read = 0.955136
+Row_Buffer_Locality_write = 0.790448
+Bank_Level_Parallism = 2.750385
+Bank_Level_Parallism_Col = 2.493107
+Bank_Level_Parallism_Ready = 1.358652
+write_to_read_ratio_blp_rw_average = 0.452681
+GrpLevelPara = 2.176751 
+
+BW Util details:
+bwutil = 0.542999 
+total_CMD = 382638 
+util_bw = 207772 
+Wasted_Col = 76741 
+Wasted_Row = 18197 
+Idle = 79928 
+
+BW Util Bottlenecks: 
+RCDc_limit = 19280 
+RCDWRc_limit = 9330 
+WTRc_limit = 18383 
+RTWc_limit = 59405 
+CCDLc_limit = 46502 
+rwq = 0 
+CCDLc_limit_alone = 37513 
+WTRc_limit_alone = 17338 
+RTWc_limit_alone = 51461 
+
+Commands details: 
+total_CMD = 382638 
+n_nop = 265971 
+Read = 72352 
+Write = 0 
+L2_Alloc = 0 
+L2_WB = 31534 
+n_act = 6558 
+n_pre = 6542 
+n_ref = 51680 
+n_req = 88119 
+total_req = 103886 
+
+Dual Bus Interface Util: 
+issued_total_row = 13100 
+issued_total_col = 103886 
+Row_Bus_Util =  0.034236 
+CoL_Bus_Util = 0.271499 
+Either_Row_CoL_Bus_Util = 0.304902 
+Issued_on_Two_Bus_Simul_Util = 0.000834 
+issued_two_Eff = 0.002734 
+queue_avg = 28.518995 
+
+
+dram_util_bins: 0 0 0 0 0 0 0 0 0 0
+dram_eff_bins: 0 0 0 0 0 0 0 0 0 0
+mrqq: max=64 avg=28.519
+
+========= L2 cache stats =========
+L2_cache_bank[0]: Access = 94325, Miss = 38930, Miss_rate = 0.413, Pending_hits = 5211, Reservation_fails = 1041
+L2_cache_bank[1]: Access = 93840, Miss = 38928, Miss_rate = 0.415, Pending_hits = 5152, Reservation_fails = 706
+L2_cache_bank[2]: Access = 94540, Miss = 38920, Miss_rate = 0.412, Pending_hits = 5180, Reservation_fails = 709
+L2_cache_bank[3]: Access = 94904, Miss = 38900, Miss_rate = 0.410, Pending_hits = 5207, Reservation_fails = 822
+L2_cache_bank[4]: Access = 94565, Miss = 38912, Miss_rate = 0.411, Pending_hits = 5248, Reservation_fails = 777
+L2_cache_bank[5]: Access = 94238, Miss = 38912, Miss_rate = 0.413, Pending_hits = 5113, Reservation_fails = 930
+L2_cache_bank[6]: Access = 94559, Miss = 38936, Miss_rate = 0.412, Pending_hits = 5179, Reservation_fails = 667
+L2_cache_bank[7]: Access = 94752, Miss = 38912, Miss_rate = 0.411, Pending_hits = 5203, Reservation_fails = 1079
+L2_cache_bank[8]: Access = 94139, Miss = 38924, Miss_rate = 0.413, Pending_hits = 5070, Reservation_fails = 657
+L2_cache_bank[9]: Access = 94371, Miss = 38912, Miss_rate = 0.412, Pending_hits = 5215, Reservation_fails = 882
+L2_cache_bank[10]: Access = 94340, Miss = 38912, Miss_rate = 0.412, Pending_hits = 5079, Reservation_fails = 741
+L2_cache_bank[11]: Access = 94437, Miss = 38912, Miss_rate = 0.412, Pending_hits = 5310, Reservation_fails = 1198
+L2_total_cache_accesses = 1133010
+L2_total_cache_misses = 467010
+L2_total_cache_miss_rate = 0.4122
+L2_total_cache_pending_hits = 62167
+L2_total_cache_reservation_fails = 10209
+L2_total_cache_breakdown:
+	L2_cache_stats_breakdown[GLOBAL_ACC_R][HIT] = 62691
+	L2_cache_stats_breakdown[GLOBAL_ACC_R][HIT_RESERVED] = 62041
+	L2_cache_stats_breakdown[GLOBAL_ACC_R][MISS] = 108550
+	L2_cache_stats_breakdown[GLOBAL_ACC_R][RESERVATION_FAIL] = 8585
+	L2_cache_stats_breakdown[GLOBAL_ACC_R][SECTOR_MISS] = 325650
+	L2_cache_stats_breakdown[LOCAL_ACC_R][HIT] = 0
+	L2_cache_stats_breakdown[LOCAL_ACC_R][HIT_RESERVED] = 0
+	L2_cache_stats_breakdown[LOCAL_ACC_R][MISS] = 0
+	L2_cache_stats_breakdown[LOCAL_ACC_R][RESERVATION_FAIL] = 0
+	L2_cache_stats_breakdown[LOCAL_ACC_R][SECTOR_MISS] = 0
+	L2_cache_stats_breakdown[CONST_ACC_R][HIT] = 22
+	L2_cache_stats_breakdown[CONST_ACC_R][HIT_RESERVED] = 6
+	L2_cache_stats_breakdown[CONST_ACC_R][MISS] = 1
+	L2_cache_stats_breakdown[CONST_ACC_R][RESERVATION_FAIL] = 106
+	L2_cache_stats_breakdown[CONST_ACC_R][SECTOR_MISS] = 1
+	L2_cache_stats_breakdown[TEXTURE_ACC_R][HIT] = 0
+	L2_cache_stats_breakdown[TEXTURE_ACC_R][HIT_RESERVED] = 0
+	L2_cache_stats_breakdown[TEXTURE_ACC_R][MISS] = 0
+	L2_cache_stats_breakdown[TEXTURE_ACC_R][RESERVATION_FAIL] = 0
+	L2_cache_stats_breakdown[TEXTURE_ACC_R][SECTOR_MISS] = 0
+	L2_cache_stats_breakdown[GLOBAL_ACC_W][HIT] = 540680
+	L2_cache_stats_breakdown[GLOBAL_ACC_W][HIT_RESERVED] = 0
+	L2_cache_stats_breakdown[GLOBAL_ACC_W][MISS] = 2048
+	L2_cache_stats_breakdown[GLOBAL_ACC_W][RESERVATION_FAIL] = 0
+	L2_cache_stats_breakdown[GLOBAL_ACC_W][SECTOR_MISS] = 30720
+	L2_cache_stats_breakdown[LOCAL_ACC_W][HIT] = 0
+	L2_cache_stats_breakdown[LOCAL_ACC_W][HIT_RESERVED] = 0
+	L2_cache_stats_breakdown[LOCAL_ACC_W][MISS] = 0
+	L2_cache_stats_breakdown[LOCAL_ACC_W][RESERVATION_FAIL] = 0
+	L2_cache_stats_breakdown[LOCAL_ACC_W][SECTOR_MISS] = 0
+	L2_cache_stats_breakdown[L1_WRBK_ACC][HIT] = 0
+	L2_cache_stats_breakdown[L1_WRBK_ACC][HIT_RESERVED] = 0
+	L2_cache_stats_breakdown[L1_WRBK_ACC][MISS] = 0
+	L2_cache_stats_breakdown[L1_WRBK_ACC][RESERVATION_FAIL] = 0
+	L2_cache_stats_breakdown[L1_WRBK_ACC][SECTOR_MISS] = 0
+	L2_cache_stats_breakdown[L2_WRBK_ACC][HIT] = 0
+	L2_cache_stats_breakdown[L2_WRBK_ACC][HIT_RESERVED] = 0
+	L2_cache_stats_breakdown[L2_WRBK_ACC][MISS] = 0
+	L2_cache_stats_breakdown[L2_WRBK_ACC][RESERVATION_FAIL] = 0
+	L2_cache_stats_breakdown[L2_WRBK_ACC][SECTOR_MISS] = 0
+	L2_cache_stats_breakdown[INST_ACC_R][HIT] = 440
+	L2_cache_stats_breakdown[INST_ACC_R][HIT_RESERVED] = 120
+	L2_cache_stats_breakdown[INST_ACC_R][MISS] = 10
+	L2_cache_stats_breakdown[INST_ACC_R][RESERVATION_FAIL] = 1518
+	L2_cache_stats_breakdown[INST_ACC_R][SECTOR_MISS] = 30
+	L2_cache_stats_breakdown[L1_WR_ALLOC_R][HIT] = 0
+	L2_cache_stats_breakdown[L1_WR_ALLOC_R][HIT_RESERVED] = 0
+	L2_cache_stats_breakdown[L1_WR_ALLOC_R][MISS] = 0
+	L2_cache_stats_breakdown[L1_WR_ALLOC_R][RESERVATION_FAIL] = 0
+	L2_cache_stats_breakdown[L1_WR_ALLOC_R][SECTOR_MISS] = 0
+	L2_cache_stats_breakdown[L2_WR_ALLOC_R][HIT] = 0
+	L2_cache_stats_breakdown[L2_WR_ALLOC_R][HIT_RESERVED] = 0
+	L2_cache_stats_breakdown[L2_WR_ALLOC_R][MISS] = 0
+	L2_cache_stats_breakdown[L2_WR_ALLOC_R][RESERVATION_FAIL] = 0
+	L2_cache_stats_breakdown[L2_WR_ALLOC_R][SECTOR_MISS] = 0
+	L2_cache_stats_breakdown[GLOBAL_ACC_R][TOTAL_ACCESS] = 558932
+	L2_cache_stats_breakdown[CONST_ACC_R][TOTAL_ACCESS] = 30
+	L2_cache_stats_breakdown[GLOBAL_ACC_W][TOTAL_ACCESS] = 573448
+	L2_cache_stats_breakdown[INST_ACC_R][TOTAL_ACCESS] = 600
+L2_total_cache_reservation_fail_breakdown:
+	L2_cache_stats_fail_breakdown[GLOBAL_ACC_R][MISS_QUEUE_FULL] = 8466
+	L2_cache_stats_fail_breakdown[GLOBAL_ACC_R][MSHR_MERGE_ENRTY_FAIL] = 119
+	L2_cache_stats_fail_breakdown[CONST_ACC_R][MSHR_MERGE_ENRTY_FAIL] = 106
+	L2_cache_stats_fail_breakdown[INST_ACC_R][MSHR_MERGE_ENRTY_FAIL] = 1518
+L2_cache_data_port_util = 0.176
+L2_cache_fill_port_util = 0.125
+
+icnt_total_pkts_mem_to_simt=1133010
+icnt_total_pkts_simt_to_mem=713346
+LD_mem_lat_dist  0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ST_mem_lat_dist  0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+----------------------------Interconnect-DETAILS--------------------------------
+Class 0:
+Packet latency average = 20.3725
+	minimum = 5
+	maximum = 210
+Network latency average = 19.8065
+	minimum = 5
+	maximum = 207
+Slowest packet = 887998
+Flit latency average = 17.0524
+	minimum = 5
+	maximum = 204
+Slowest flit = 1085426
+Fragmentation average = 0.000839113
+	minimum = 0
+	maximum = 143
+Injected packet rate average = 0.268163
+	minimum = 0.110484 (at node 6)
+	maximum = 0.466165 (at node 18)
+Accepted packet rate average = 0.268163
+	minimum = 0.140082 (at node 16)
+	maximum = 0.376247 (at node 1)
+Injected flit rate average = 0.331886
+	minimum = 0.222559 (at node 6)
+	maximum = 0.466165 (at node 18)
+Accepted flit rate average= 0.331886
+	minimum = 0.283464 (at node 16)
+	maximum = 0.376247 (at node 1)
+Injected packet length average = 1.23763
+Accepted packet length average = 1.23763
+Total in-flight flits = 0 (0 measured)
+====== Overall Traffic Statistics ======
+====== Traffic class 0 ======
+Packet latency average = 15.1746 (2 samples)
+	minimum = 5 (2 samples)
+	maximum = 161.5 (2 samples)
+Network latency average = 14.5619 (2 samples)
+	minimum = 5 (2 samples)
+	maximum = 160 (2 samples)
+Flit latency average = 12.7747 (2 samples)
+	minimum = 5 (2 samples)
+	maximum = 158.5 (2 samples)
+Fragmentation average = 0.000419557 (2 samples)
+	minimum = 0 (2 samples)
+	maximum = 71.5 (2 samples)
+Injected packet rate average = 0.197599 (2 samples)
+	minimum = 0.0857646 (2 samples)
+	maximum = 0.33807 (2 samples)
+Accepted packet rate average = 0.197599 (2 samples)
+	minimum = 0.108155 (2 samples)
+	maximum = 0.272176 (2 samples)
+Injected flit rate average = 0.243026 (2 samples)
+	minimum = 0.166093 (2 samples)
+	maximum = 0.33807 (2 samples)
+Accepted flit rate average = 0.243026 (2 samples)
+	minimum = 0.210365 (2 samples)
+	maximum = 0.272176 (2 samples)
+Injected packet size average = 1.2299 (2 samples)
+Accepted packet size average = 1.2299 (2 samples)
+Hops average = 1 (2 samples)
+----------------------------END-of-Interconnect-DETAILS-------------------------
+# warps executed conditional branch and have divergence: 126977
+# warps executed conditional branch(no matter they have divergence or not): 5820439
+
+
+gpgpu_simulation_time = 0 days, 0 hrs, 9 min, 7 sec (547 sec)
+gpgpu_simulation_rate = 295331 (inst/sec)
+gpgpu_simulation_rate = 529 (cycle/sec)
+gpgpu_silicon_slowdown = 1323251x
+Training done
+GPGPU-Sim: *** exit detected ***
